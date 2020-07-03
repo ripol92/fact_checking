@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\ImageCheck;
 use Illuminate\Console\Command;
+use Ramsey\Uuid\Uuid;
 
 class CheckImage extends Command
 {
@@ -16,7 +17,7 @@ class CheckImage extends Command
      *
      * @var string
      */
-    protected $signature = 'tools:check-image {image_path}';
+    protected $signature = 'tools:check-image {image_path} {--uuid=}';
 
     /**
      * The console command description.
@@ -44,6 +45,10 @@ class CheckImage extends Command
     {
         // get path to image
         $imgPath = $this->argument("image_path");
+        $uuid = $this->option("uuid");
+        if ($uuid == "") {
+            $uuid = Uuid::uuid1()->toString();
+        }
 
         // change directory to project to avoid `path` misconfigurations and lookups
         chdir(config("services.fake_img_detector.project_path"));
@@ -59,12 +64,12 @@ class CheckImage extends Command
 
         // in case classifier fails log result and stop command
         if ($glClassCode != 0) {
-            $this->logGlobalClassifierError($imgPath, $glClassMessage);
+            $this->logGlobalClassifierError($uuid, $imgPath, $glClassMessage);
             return;
         }
         // in case ok run but image corruption or etc...
         if (in_array($glClassMessage, static::ERR_ON_IMAGE)) {
-            $this->logGlobalClassifierError($imgPath, $glClassMessage);
+            $this->logGlobalClassifierError($uuid, $imgPath, $glClassMessage);
             return;
         }
 
@@ -80,37 +85,40 @@ class CheckImage extends Command
 
         // in case classifier fails log result and stop command
         if ($lcDetCode != 0) {
-            $this->logLocalDetectorError($imgPath, $lcDetMessage);
+            $this->logLocalDetectorError($uuid, $imgPath, $lcDetMessage);
             return;
         }
         // in case ok run but image corruption or etc...
         if (in_array($lcDetMessage, static::ERR_ON_IMAGE)) {
-            $this->logLocalDetectorError($imgPath, $lcDetMessage);
+            $this->logLocalDetectorError($uuid, $imgPath, $lcDetMessage);
             return;
         }
 
-        $this->storeAnalyzeResults($imgPath, $glClassMessage, $outPath);
+        $this->storeAnalyzeResults($uuid, $imgPath, $glClassMessage, $outPath);
     }
 
-    protected function logGlobalClassifierError($imgPath, $error)
+    protected function logGlobalClassifierError($id, $imgPath, $error)
     {
         $imgCheck = new ImageCheck();
+        $imgCheck->identifier = $id;
         $imgCheck->image_path = $imgPath;
         $imgCheck->local_detector_error = $error;
         $imgCheck->save();
     }
 
-    protected function logLocalDetectorError($imgPath, $error)
+    protected function logLocalDetectorError($id, $imgPath, $error)
     {
         $imgCheck = new ImageCheck();
+        $imgCheck->identifier = $id;
         $imgCheck->image_path = $imgPath;
         $imgCheck->global_detector_error = $error;
         $imgCheck->save();
     }
 
-    protected function storeAnalyzeResults($imgPath, $analyzeMessage, $resultsPath)
+    protected function storeAnalyzeResults($id, $imgPath, $analyzeMessage, $resultsPath)
     {
         $imgCheck = new ImageCheck();
+        $imgCheck->identifier = $id;
         $imgCheck->image_path = $imgPath;
         $imgCheck->analyze_msg = $analyzeMessage;
         $imgCheck->results_path = $resultsPath;

@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 /**
  * Class ImageCheck
  * @package App\Models
+ * @property string $identifier
  * @property string $image_path
  * @property string $global_detector_error
  * @property string $local_detector_error
