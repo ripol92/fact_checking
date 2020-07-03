@@ -30,4 +30,7 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'fake_img_detector' => [
+        'project_path' => env('FAKE_IMAGE_DETECTOR_PATH')
+    ]
 ];
