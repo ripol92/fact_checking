@@ -40,7 +40,7 @@ class ReceiveImageAnalyzeResults extends Command
      */
     public function handle()
     {
-        Redis::subscribe("resp", function ($message) {
+        Redis::subscribe(config("services.fake_img_detector.receive_chan"), function ($message) {
             $resp = json_decode($message, true);
             $identifier = $resp["identifier"];
             $msg = $resp["message"];
