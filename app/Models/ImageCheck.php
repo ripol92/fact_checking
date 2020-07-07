@@ -10,9 +10,7 @@ use Illuminate\Support\Carbon;
  * @package App\Models
  * @property string $identifier
  * @property string $image_path
- * @property string $global_detector_error
- * @property string $local_detector_error
- * @property string $analyze_msg
+ * @property string $message
  * @property string $results_path
  * @property Carbon $updated_at
  * @property Carbon $created_at
@@ -20,10 +18,9 @@ use Illuminate\Support\Carbon;
 class ImageCheck extends Model
 {
     protected $fillable = [
+        "identifier",
         "image_path",
-        "global_detector_error",
-        "local_detector_error",
-        "analyze_msg",
+        "message",
         "results_path",
     ];
 

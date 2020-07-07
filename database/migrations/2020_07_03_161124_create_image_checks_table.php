@@ -15,11 +15,9 @@ class CreateImageChecksTable extends Migration
     {
         Schema::create('image_checks', function (Blueprint $table) {
             $table->id();
-            $table->uuid("identifier")->unique();
             $table->string("image_path");
-            $table->string("global_detector_error")->nullable();
-            $table->string("local_detector_error")->nullable();
-            $table->string("analyze_msg")->nullable();
+            $table->uuid("identifier")->nullable();
+            $table->string("message")->nullable();
             $table->string("results_path")->nullable();
             $table->timestamps();
         });

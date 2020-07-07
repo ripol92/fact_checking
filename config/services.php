@@ -31,6 +31,7 @@ return [
     ],
 
     'fake_img_detector' => [
-        'project_path' => env('FAKE_IMAGE_DETECTOR_PATH')
+        'publish_chan' => env('FAKE_IMAGE_PUBLISH_CHANNEL'),
+        'receive_chan' => env('FAKE_IMAGE_RECEIVE_RESULTS_CHANNEL')
     ]
 ];
