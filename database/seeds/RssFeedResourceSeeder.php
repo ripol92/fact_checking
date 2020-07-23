@@ -107,171 +107,171 @@ class RssFeedResourceSeeder extends Seeder
                 'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
             ],
             [
-                'name' => '',
-                'display_name' => '',
+                'name' => 'khujand',
+                'display_name' => 'Хуҷанд',
                 'link' => 'http://feeds.feedburner.com/khujand/JWHN',
                 'order' => 12,
-                'language_id' => ,
+                'language_id' => self::TAJIK_LANGUAGE_ID,
                 'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
             ],
             [
-                'name' => '',
-                'display_name' => '',
+                'name' => 'sugd',
+                'display_name' => 'Мақомоти иҷроияи ҳокимияти давлатии вилояти Суғд',
                 'link' => 'http://feeds.feedburner.com/sugd/qvgT',
                 'order' => 13,
-                'language_id' => ,
+                'language_id' => self::TAJIK_LANGUAGE_ID,
                 'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
             ],
             [
-                'name' => '',
-                'display_name' => '',
+                'name' => 'president',
+                'display_name' => 'Президенти Ҷумҳурии Тоҷикистон',
                 'link' => 'http://feeds.feedburner.com/PresidentOfTajikistan',
                 'order' => 14,
-                'language_id' => ,
+                'language_id' => self::TAJIK_LANGUAGE_ID,
                 'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
             ],
             [
-                'name' => '',
-                'display_name' => '',
+                'name' => 'pressa',
+                'display_name' => 'Тоҷикистон',
                 'link' => 'http://feeds.feedburner.com/Pressatj',
                 'order' => 15,
-                'language_id' => ,
+                'language_id' => self::TAJIK_LANGUAGE_ID,
                 'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
             ],
             [
-                'name' => '',
-                'display_name' => '',
+                'name' => 'asia-times',
+                'display_name' => 'The Asia Times',
                 'link' => 'http://feeds.feedburner.com/TheAsiaTimesrss',
                 'order' => 16,
-                'language_id' => ,
+                'language_id' => self::RUSSIAN_LANGUAGE_ID,
                 'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
             ],
             [
-                'name' => '',
-                'display_name' => '',
+                'name' => 'orion',
+                'display_name' => 'Ориён',
                 'link' => 'http://feeds.feedburner.com/orien/JHFQ',
                 'order' => 17,
-                'language_id' => ,
+                'language_id' => self::TAJIK_LANGUAGE_ID,
                 'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
             ],
             [
-                'name' => '',
-                'display_name' => '',
+                'name' => 'ittiloot',
+                'display_name' => 'Иттилоот',
                 'link' => 'http://feeds.feedburner.com/ittiloot/VWow',
                 'order' => 18,
-                'language_id' => ,
+                'language_id' => self::RUSSIAN_LANGUAGE_ID,
                 'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
             ],
             [
-                'name' => '',
-                'display_name' => '',
+                'name' => 'nm',
+                'display_name' => 'Независимое мнение',
                 'link' => 'http://feeds.feedburner.com/nm/Brfd',
                 'order' => 19,
-                'language_id' => ,
+                'language_id' => self::RUSSIAN_LANGUAGE_ID,
                 'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
             ],
+//            [
+//                'name' => '',
+//                'display_name' => '',
+//                'link' => 'http://feeds.feedburner.com/GoogleAlert-Siteferganaru',
+//                'order' => 20,
+//                'language_id' => ,
+//                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
+//            ],
+//            [
+//                'name' => '',
+//                'display_name' => '',
+//                'link' => 'http://feeds.feedburner.com/GoogleAlert-Sitejumhuriyattj',
+//                'order' => 21,
+//                'language_id' => ,
+//                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
+//            ],
             [
-                'name' => '',
-                'display_name' => '',
-                'link' => 'http://feeds.feedburner.com/GoogleAlert-Siteferganaru',
-                'order' => 20,
-                'language_id' => ,
-                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
-            ],
-            [
-                'name' => '',
-                'display_name' => '',
-                'link' => 'http://feeds.feedburner.com/GoogleAlert-Sitejumhuriyattj',
-                'order' => 21,
-                'language_id' => ,
-                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
-            ],
-            [
-                'name' => '',
-                'display_name' => '',
+                'name' => 'central_asian',
+                'display_name' => 'Служба Новостей Центральной Азии',
                 'link' => 'http://feeds.feedburner.com/CentralAsianTJru',
                 'order' => 22,
-                'language_id' => ,
+                'language_id' => self::RUSSIAN_LANGUAGE_ID,
                 'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
             ],
+//            [
+//                'name' => '',
+//                'display_name' => '',
+//                'link' => 'http://feeds.feedburner.com/GoogleAlert-Sitevkdtj',
+//                'order' => 23,
+//                'language_id' => ,
+//                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
+//            ],
+//            [
+//                'name' => '',
+//                'display_name' => '',
+//                'link' => 'http://feeds.feedburner.com/GoogleAlert-Sitemfatj',
+//                'order' => 24,
+//                'language_id' => ,
+//                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
+//            ],
+//            [
+//                'name' => '',
+//                'display_name' => '',
+//                'link' => 'http://feeds.feedburner.com/GoogleAlert-Siteoilatj',
+//                'order' => 25,
+//                'language_id' => ,
+//                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
+//            ],
+//            [
+//                'name' => '',
+//                'display_name' => '',
+//                'link' => 'http://feeds.feedburner.com/GoogleAlert-Sitetajiktatj',
+//                'order' => 26,
+//                'language_id' => ,
+//                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
+//            ],
+//            [
+//                'name' => '',
+//                'display_name' => '',
+//                'link' => 'http://feeds.feedburner.com/GoogleAlert-Sitetoptjcom',
+//                'order' => 27,
+//                'language_id' => ,
+//                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
+//            ],
             [
-                'name' => '',
-                'display_name' => '',
-                'link' => 'http://feeds.feedburner.com/GoogleAlert-Sitevkdtj',
-                'order' => 23,
-                'language_id' => ,
-                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
-            ],
-            [
-                'name' => '',
-                'display_name' => '',
-                'link' => 'http://feeds.feedburner.com/GoogleAlert-Sitemfatj',
-                'order' => 24,
-                'language_id' => ,
-                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
-            ],
-            [
-                'name' => '',
-                'display_name' => '',
-                'link' => 'http://feeds.feedburner.com/GoogleAlert-Siteoilatj',
-                'order' => 25,
-                'language_id' => ,
-                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
-            ],
-            [
-                'name' => '',
-                'display_name' => '',
-                'link' => 'http://feeds.feedburner.com/GoogleAlert-Sitetajiktatj',
-                'order' => 26,
-                'language_id' => ,
-                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
-            ],
-            [
-                'name' => '',
-                'display_name' => '',
-                'link' => 'http://feeds.feedburner.com/GoogleAlert-Sitetoptjcom',
-                'order' => 27,
-                'language_id' => ,
-                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
-            ],
-            [
-                'name' => '',
-                'display_name' => '',
+                'name' => 'current_time',
+                'display_name' => 'Настоящее Время',
                 'link' => 'http://feeds.feedburner.com/currenttime/Vgit',
                 'order' => 28,
-                'language_id' => ,
+                'language_id' => self::RUSSIAN_LANGUAGE_ID,
                 'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
             ],
             [
-                'name' => '',
-                'display_name' => '',
+                'name' => 'current_time',
+                'display_name' => 'Настоящее Время',
                 'link' => 'http://feeds.feedburner.com/currenttime/cYjb',
                 'order' => 29,
-                'language_id' => ,
+                'language_id' => self::RUSSIAN_LANGUAGE_ID,
                 'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
             ],
+//            [
+//                'name' => '',
+//                'display_name' => '',
+//                'link' => 'http://feeds.feedburner.com/GoogleAlert-TajikistanNews',
+//                'order' => 30,
+//                'language_id' => ,
+//                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
+//            ],
+//            [
+//                'name' => '',
+//                'display_name' => '',
+//                'link' => 'http://feeds.feedburner.com/google/AeEa',
+//                'order' => 31,
+//                'language_id' => ,
+//                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
+//            ],
             [
-                'name' => '',
-                'display_name' => '',
-                'link' => 'http://feeds.feedburner.com/GoogleAlert-TajikistanNews',
-                'order' => 30,
-                'language_id' => ,
-                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
-            ],
-            [
-                'name' => '',
-                'display_name' => '',
-                'link' => 'http://feeds.feedburner.com/google/AeEa',
-                'order' => 31,
-                'language_id' => ,
-                'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
-            ],
-            [
-                'name' => '',
-                'display_name' => '',
+                'name' => 'vecherka',
+                'display_name' => 'Вечёрка',
                 'link' => 'http://feeds.feedburner.com/vecherka/WTlj',
                 'order' => 32,
-                'language_id' => ,
+                'language_id' => self::RUSSIAN_LANGUAGE_ID,
                 'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
             ]
 
