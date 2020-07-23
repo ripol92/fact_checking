@@ -26,6 +26,11 @@ class LanguageSeeder extends Seeder
                 'name' => 'tj',
                 'display_name' => 'Tajik',
                 'order' => 3
+            ],
+            [
+                'name' => 'all',
+                'display_name' => 'Mixed (En, Ru, Tj)',
+                'order' => 4
             ]
         ];
 
