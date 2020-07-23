@@ -15,8 +15,8 @@ class UserMarkedItemTable extends Migration
     {
         Schema::create('user_marked_item', function (Blueprint $table) {
             $table->increments('id');
-            $table->bigInteger('user_id')->unique()->unsigned();
-            $table->bigInteger('marked_item_id')->unique()->unsigned();
+            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('marked_item_id')->unsigned();
 
             $table->foreign('user_id')->references('id')
                 ->on('users')->onDelete('cascade');

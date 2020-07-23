@@ -33,4 +33,4 @@ Route::group($androidAppRoutes, function () {
 
 });
 
-//Route::post("/test", "Api\FeedController@getNews");
+Route::post("/test", "Api\FeedController@getNews");

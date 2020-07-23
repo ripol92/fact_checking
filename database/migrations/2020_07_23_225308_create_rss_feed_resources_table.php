@@ -20,9 +20,13 @@ class CreateRssFeedResourcesTable extends Migration
             $table->string('display_name');
             $table->integer('order')->nullable();
 
-            $table->bigInteger('language_id')->unique()->unsigned();
+            $table->bigInteger('language_id')->unsigned();
             $table->foreign('language_id')->references('id')
                 ->on('languages')->onDelete('cascade');
+
+            $table->bigInteger('rss_feed_type_id')->unsigned();
+            $table->foreign('rss_feed_type_id')->references('id')
+                ->on('rss_feed_types')->onDelete('cascade');
         });
     }
 
