@@ -5,8 +5,8 @@ use Illuminate\Database\Seeder;
 class RssFeedResourceSeeder extends Seeder
 {
     CONST ENGLISH_LANGUAGE_ID = 1;
-    CONST TAJIK_LANGUAGE_ID = 2;
-    CONST RUSSIAN_LANGUAGE_ID = 3;
+    CONST RUSSIAN_LANGUAGE_ID = 2;
+    CONST TAJIK_LANGUAGE_ID = 3;
     CONST MIXED_LANGUAGE_ID = 4;
 
     CONST FEEDBURNER_RSS_FEED_TYPE_ID = 1;

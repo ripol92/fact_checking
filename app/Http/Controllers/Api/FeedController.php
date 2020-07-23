@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Feed;
+use App\Services\RssFeedService;
 use Illuminate\Http\Request;
 
 class FeedController extends Controller
@@ -15,24 +15,9 @@ class FeedController extends Controller
             "lang" => "required|in:ru,en,tj",
             "pagination" => "numeric",
         ]);
-        $news = [];
-        try {
-            $rss = Feed::loadRss("http://feeds.feedburner.com/vecherka/WTlj");
-        } catch (\FeedException $e) {
-            return response()->json(["message" => $e->getMessage()], $e->getCode());
 
-        }
+        $allRssFeedNews = RssFeedService::allRssFeedNews($request);
 
-        foreach ($rss->item as $item) {
-            $news[] = [
-                'title' => strip_tags($item->title),
-                'description' => strip_tags($item->description),
-                'link' => strip_tags($item->link),
-                'date' => date("Y-m-d h:i:sa", strip_tags($item->timestamp)),
-//                'html_encoded' => $item->{'content:encoded'}
-            ];
-
-        }
-        return $news;
+        return $allRssFeedNews;
     }
 }
