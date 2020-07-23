@@ -17,7 +17,7 @@ class FeedController extends Controller
         ]);
         $news = [];
         try {
-            $rss = Feed::loadRss("http://feeds.feedburner.com/vecherka/WTlj");
+            $rss = Feed::loadRss("http://feeds.feedburner.com/radioozodirss");
         } catch (\FeedException $e) {
             return response()->json(["message" => $e->getMessage()], $e->getCode());
 
