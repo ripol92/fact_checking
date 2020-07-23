@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\UserMarkedItem;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -70,5 +71,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function userMarkedItem()
+    {
+        return $this->hasOne(UserMarkedItem::class);
     }
 }

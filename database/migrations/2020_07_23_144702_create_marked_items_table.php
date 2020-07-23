@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMarkedNewsTable extends Migration
+class CreateMarkedItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateMarkedNewsTable extends Migration
      */
     public function up()
     {
-        Schema::create('marked_news', function (Blueprint $table) {
+        Schema::create('marked_items', function (Blueprint $table) {
             $table->id();
             $table->string('link');
             $table->longText('description');
@@ -30,6 +30,6 @@ class CreateMarkedNewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('marked_news');
+        Schema::dropIfExists('marked_items');
     }
 }
