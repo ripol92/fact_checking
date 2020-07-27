@@ -15,8 +15,9 @@ class RssFeedService
         foreach ($rssFeedResources as $rssFeedResource) {
             try {
                 $rss = Feed::loadRss($rssFeedResource->link);
-            } catch (\FeedException $e) {
-                return response()->json(["message" => $e->getMessage()], $e->getCode());
+            } catch (\Exception $e) {
+                continue;
+//                return response()->json(["message" => $e->getMessage()], $e->getCode());
             }
             foreach ($rss->item as $item) {
                 $news[] = [
