@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\ArticleParsed;
+use App\Events\RequestToTextRuSent;
+use App\Listeners\ReceiveTextRuResponse;
+use App\Listeners\SendTextRuRequest;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -18,6 +22,14 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
+        ArticleParsed::class => [
+            SendTextRuRequest::class
+        ],
+
+        RequestToTextRuSent::class => [
+            ReceiveTextRuResponse::class
+        ]
     ];
 
     /**
