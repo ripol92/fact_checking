@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\MarkedItem;
 use App\Models\UserMarkedItem;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -75,6 +76,11 @@ class User extends Authenticatable implements JWTSubject
 
     public function userMarkedItem()
     {
-        return $this->hasOne(UserMarkedItem::class);
+        return $this->hasMany(UserMarkedItem::class);
+    }
+
+    public function markedNews()
+    {
+        return $this->belongsToMany(MarkedItem::class, 'user_marked_item');
     }
 }

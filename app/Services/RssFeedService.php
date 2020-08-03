@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Language;
 use App\Models\RssFeedResource;
 use Feed;
 
@@ -10,14 +11,17 @@ class RssFeedService
     public static function allRssFeedNews($attributes)
     {
         $news = [];
-        $rssFeedResources = RssFeedResource::all();
+
+        $languages = $attributes->lang ? Language::where('name', $attributes->lang) : Language::all();
+        $languages = $languages->pluck('id');
+        $rssFeedResources = RssFeedResource::whereIn('language_id', $languages)->get();
 
         foreach ($rssFeedResources as $rssFeedResource) {
             try {
                 $rss = Feed::loadRss($rssFeedResource->link);
             } catch (\Exception $e) {
+                // Здесь можно логировать ошибки, если что
                 continue;
-//                return response()->json(["message" => $e->getMessage()], $e->getCode());
             }
             foreach ($rss->item as $item) {
                 $news[] = [

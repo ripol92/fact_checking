@@ -29,8 +29,10 @@ $androidAppRoutes = [
 ];
 Route::group($androidAppRoutes, function () {
     Route::post("/create", "UserController@store");
-    Route::post("/get-feeds", "FeedController@getNews");
+    Route::get("/news", "FeedController@getNews");
+    Route::post("/like-item", "FeedController@likeItem");
+    Route::post("/dislike-item", "FeedController@dislikeItem");
+    Route::get("/liked-news", "FeedController@getUserLikedNews");
 
 });
 
-Route::post("/test", "Api\FeedController@getNews");
