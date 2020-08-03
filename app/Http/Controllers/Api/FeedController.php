@@ -22,10 +22,10 @@ class FeedController extends Controller
      */
     public function getNews(Request $request)
     {
-//        $this->validate($request, [
-//            "lang" => "required|in:ru,en,tj",
-//            "limit" => "integer|nullable",
-//        ]);
+        $this->validate($request, [
+            "lang" => "string|nullable",
+            "limit" => "integer|nullable",
+        ]);
 
         $allRssFeedNews = RssFeedService::allRssFeedNews($request);
 
