@@ -8,11 +8,11 @@ use Feed;
 
 class RssFeedService
 {
-    public static function allRssFeedNews($attributes)
+    public static function allRssFeedNews($attributes = null)
     {
         $news = [];
 
-        $languages = $attributes->lang ? Language::where('name', $attributes->lang) : Language::all();
+        $languages = isset($attributes->lang) ? Language::where('name', $attributes->lang) : Language::all();
         $languages = $languages->pluck('id');
         $rssFeedResources = RssFeedResource::whereIn('language_id', $languages)->get();
 
