@@ -9,6 +9,7 @@ use App\Services\RssFeedService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
@@ -27,7 +28,9 @@ class FeedController extends Controller
             "limit" => "integer|nullable",
         ]);
 
-        $allRssFeedNews = RssFeedService::allRssFeedNews($request);
+        $allRssFeedNews = Cache::get('news', function ($request) {
+            return RssFeedService::allRssFeedNews($request);
+        });
 
         return $allRssFeedNews;
     }
