@@ -33,5 +33,7 @@ Route::group($androidAppRoutes, function () {
     Route::post("/like-item", "FeedController@likeItem");
     Route::post("/dislike-item", "FeedController@dislikeItem");
     Route::get("/liked-news", "FeedController@getUserLikedNews");
+    Route::post("/analyze-item", "FeedController@analyzeItem");
+    Route::get("/analyzed-news", "FeedController@getUserAnalyzedNews");
 });
 

@@ -12,6 +12,8 @@ class MarkedItem extends Model
         'description',
         'title',
         'date',
+        'lang',
+        'is_analyzed',
     ];
 
     public function userMarkedItem()
@@ -22,5 +24,15 @@ class MarkedItem extends Model
     public function users()
     {
         return $this->belongsToMany(User::class,'user_marked_item');
+    }
+
+    public function userAnalyzedItem()
+    {
+        return $this->hasMany(UserAnalyzedItem::class);
+    }
+
+    public function analyzedUsers()
+    {
+        return $this->belongsToMany(User::class,'user_analyzed_item');
     }
 }

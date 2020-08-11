@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\MarkedItem;
+use App\Models\UserAnalyzedItem;
 use App\Models\UserMarkedItem;
 use App\Services\RssFeedService;
 use Carbon\Carbon;
@@ -15,6 +16,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 
 class FeedController extends Controller
 {
+    private $req;
 
     /**
      * @param Request $request
@@ -27,9 +29,9 @@ class FeedController extends Controller
             "lang" => "string|nullable",
             "limit" => "integer|nullable",
         ]);
-
-        $allRssFeedNews = Cache::get('news', function ($request) {
-            return RssFeedService::allRssFeedNews($request);
+        $this->req = $request;
+        $allRssFeedNews = Cache::get('news', function () {
+            return RssFeedService::allRssFeedNews($this->req);
         });
 
         return $allRssFeedNews;
@@ -48,6 +50,7 @@ class FeedController extends Controller
             "title" => "required|string",
             "description" => "string|nullable",
             "date" => "date|required",
+            "lang" => "required|string",
         ]);
 
         $requestData = $request->all();
@@ -126,4 +129,73 @@ class FeedController extends Controller
 
         return $markedNews;
     }
+
+    /**
+     * @param Request $request
+     * @return mixed
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function analyzeItem(Request $request)
+    {
+        $this->validate($request, [
+            "link" => "required|string",
+            "title" => "required|string",
+            "description" => "string|nullable",
+            "date" => "date|required",
+            "lang" => "required|string",
+        ]);
+
+        $requestData = $request->all();
+        $requestData['date'] = Carbon::parse($request->date)->format('Y-m-d');
+
+        $user = $request->user();
+
+        $item = MarkedItem::where('link', $request->link)->first();
+
+        if ($item) {
+//            if($item->is_analyzed == true) {
+//                return response()->json([
+//                    'msg' => 'Item is already Analyzed',
+//                ], 408 );
+//            }
+            $userMarkedItemExist = UserAnalyzedItem::where('user_id', 1)->where('analyzed_item_id', $item->id)->exists();
+            if($userMarkedItemExist) {
+                return response()->json([
+                    'msg' => 'Record is already Exist',
+                ], 409 );
+            }
+        }
+
+        $markedItem = DB::transaction(function() use ($user, $requestData, $item) {
+            $markedItem = $item ? $item : new MarkedItem($requestData);
+            $markedItem->save();
+
+            $userAnalyzedItem = new UserAnalyzedItem();
+            $userAnalyzedItem->analyzedItem()->associate($markedItem);
+            $userAnalyzedItem->user()->associate($user);
+            $userAnalyzedItem->save();
+
+            return $markedItem;
+        });
+
+        return response()->json([
+            'item' => $markedItem->withCount('userAnalyzedItem')->get(),
+            'msg' => 'Stored Successful'
+        ], 200);
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     */
+    public function getUserAnalyzedNews(Request $request)
+    {
+        $user = $request->user();
+
+        $analyzedItems = UserAnalyzedItem::with('analyzedItem')->where('user_id', $user->id)
+            ->withCount('analyzedItem')->get();
+
+        return $analyzedItems;
+    }
+
 }

@@ -16,9 +16,11 @@ class CreateMarkedItemsTable extends Migration
         Schema::create('marked_items', function (Blueprint $table) {
             $table->id();
             $table->string('link');
+            $table->string('lang');
             $table->longText('description');
             $table->longText('title');
             $table->date('date');
+            $table->boolean('is_analyzed')->default(false);
             $table->timestamps();
         });
     }
