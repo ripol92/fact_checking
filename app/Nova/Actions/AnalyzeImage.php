@@ -27,6 +27,12 @@ class AnalyzeImage extends DetachedAction
          * @var UploadedFile $file
          */
         $file = $fields->get("input_img");
+        if (empty($file)) {
+            throw new \Exception("empty file");
+        }
+        if (!$file) {
+            throw new \Exception("file is not exists");
+        }
         Storage::disk("public")->put("", $file);
 
         $imagePath = storage_path("app" . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . $file->hashName());
