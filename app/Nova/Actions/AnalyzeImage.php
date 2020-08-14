@@ -31,11 +31,9 @@ class AnalyzeImage extends DetachedAction
 
         $imagePath = storage_path("app" . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . $file->hashName());
 
-        dispatch(function () use ($imagePath) {
-            Artisan::call("tools:analyze-image", [
-                "image_path" => $imagePath
-            ]);
-        });
+        Artisan::call("tools:analyze-image", [
+            "image_path" => $imagePath
+        ]);
     }
 
     public function fields()
