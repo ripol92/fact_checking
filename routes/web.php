@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,9 +15,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return Redirect::to("/nova");
 });
 
-Auth::routes();
+Auth::routes([
+    "register" => false,
+]);
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', function () {
+    return Redirect::to("/nova");
+});
