@@ -40,7 +40,7 @@ class AnalyzeImage extends DetachedAction
     {
         return [
             Image::make("Input Image", "input_img")
-                ->rules(["required", "mimes:jpg,jpeg,png"])
+                ->rules(["required", "file", "max:2048", "mimes:jpg,jpeg,png"])
         ];
     }
 }
