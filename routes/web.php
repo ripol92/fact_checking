@@ -43,15 +43,15 @@ Auth::routes();
 Route::get('publish', function () {
     // Route logic...
 
-    Redis::publish('urls_for_parse', json_encode(['url' => 'https://vecherka.tj/archives/46270', 'lng' => 'ru']));
+    Redis::publish('urls_for_parse', json_encode(['url' => 'https://vecherka.tj/archives/46310', 'lng' => 'ru']));
 });
 
 Route::get('/test-text', function () {
     $url = "http://api.text.ru/post";
     $client = new Client(['base_uri' => $url]);
     $data = [
-        'uid' => '5f26ced51e56d',
-        'userkey' => 'f5499652232c926bf31661b63dead693'
+        'uid' => '5f3961bc81a23',
+        'userkey' => env('TEXT_RU_KEY')
     ];
 
     $response = $client->request('POST','',[

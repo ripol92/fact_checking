@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\AnalysedUrl;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 class ReceiveTextRuResponseJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    const ANALYSED_URLS_TABLE_NAME = 'analysed_urls';
 
     /**
      * @var string
@@ -52,9 +53,10 @@ class ReceiveTextRuResponseJob implements ShouldQueue
             "form_params" => $data
         ]);
 
+        sleep(5);
         $textRuResponse = $response->getBody()->getContents();
-        DB::table('analysed_urls')
+        DB::table(self::ANALYSED_URLS_TABLE_NAME)
             ->where('id', $this->analysedUrlId)
-            ->update(['text_ru' => $textRuResponse]);
+            ->update(['text_ru' => json_encode($textRuResponse)]);
     }
 }
