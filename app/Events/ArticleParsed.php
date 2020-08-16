@@ -2,35 +2,33 @@
 
 namespace App\Events;
 
-use App\AnalysedUrl;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+
 
 class ArticleParsed
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * @var AnalysedUrl
+     * @var string
      */
-    private $analysedUrl;
+    private $analysedUrlId;
 
     /**
      * Create a new event instance.
      *
-     * @param AnalysedUrl|Model $analysedArticle
+     * @param string $analysedArticleId
      */
-    public function __construct($analysedArticle)
+    public function __construct($analysedArticleId)
     {
-        //
-        $this->analysedUrl = $analysedArticle;
+        $this->analysedUrlId = $analysedArticleId;
     }
     /**
-     * @return AnalysedUrl
+     * @return string
      */
-    public function getAnalysedUrl(): AnalysedUrl {
-        return $this->analysedUrl;
+    public function getAnalysedUrlId() {
+        return $this->analysedUrlId;
     }
 }

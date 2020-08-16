@@ -23,23 +23,24 @@ class RequestToTextRuSent {
     /**
      * Create a new event instance.
      *
-     * @param AnalysedUrl $analysedUrl
+     * @param string $analysedUrlId
      * @param $uid
      */
-    public function __construct(AnalysedUrl $analysedUrl, string $uid) {
+    public function __construct($analysedUrlId, string $uid) {
         //
-        $this->analysedUrl = $analysedUrl;
+        $this->analysedUrl = $analysedUrlId;
         $this->uid = $uid;
     }
 
     /**
-     * @return AnalysedUrl
+     * @return string
      */
-    public function getAnalysedUrl(): AnalysedUrl {
+    public function getAnalysedUrlId() {
         return $this->analysedUrl;
     }
 
     /**
+     * text.ru UUID
      * @return string
      */
     public function getUid(): string {

@@ -4,10 +4,13 @@ namespace App\Console\Commands;
 
 use App\AnalysedUrl;
 use App\Events\ArticleParsed;
+use App\FactChecking\Helpers\FastImage;
+use App\Jobs\SendTextRuRequestJob;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
+use Ramsey\Uuid\Uuid;
 
 class ListenParserResponse extends Command
 {
@@ -54,30 +57,38 @@ class ListenParserResponse extends Command
                     continue;
                 }
                 try {
-                    $results = getimagesize($imageLink);
+                    $imageSizeCheck = $this->checkImageSize($imageLink);
                 } catch (\Exception $e) {
                     Log::error($e->getMessage());
                     continue;
                 }
-                if (!$results || empty($results)) {
+                if (!$imageSizeCheck) {
                     continue;
                 }
-                if ($results[0] < 500 || $results[1] < 500) {
+                try {
+                    Storage::put(basename($imageLink), $this->file_get_content_curl($imageLink));
+                } catch (\Exception $e) {
+                    Log::error($e->getMessage());
                     continue;
                 }
-                Storage::put(basename($imageLink), $this->file_get_content_curl($imageLink));
                 $imagePaths[] = Storage::url(basename($imageLink));
             }
-            $analysedUrl = AnalysedUrl::query()->create([
+            $uudi = Uuid::uuid1()->toString();
+            AnalysedUrl::query()->create([
+                "id" => $uudi,
                 "url" => $url,
                 "article" => $article,
                 "image_links" => json_encode($imagePaths)
             ]);
 
-            event(new ArticleParsed($analysedUrl));
+            event(new ArticleParsed($uudi));
         });
     }
 
+    /**
+     * @param string $url
+     * @return bool|string
+     */
     function file_get_content_curl($url)
     {
         // Throw Error if the curl function does'nt exist.
@@ -91,5 +102,16 @@ class ListenParserResponse extends Command
         $output = curl_exec($ch);
         curl_close($ch);
         return $output;
+    }
+
+    /**
+     * @param string $imageUrl
+     * @return bool
+     */
+    function checkImageSize($imageUrl) {
+        $image = new FastImage($imageUrl);
+        list($width, $height) = $image->getSize();
+        if ($width < 500 || $height < 500) return false;
+        return true;
     }
 }

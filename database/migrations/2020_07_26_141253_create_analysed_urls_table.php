@@ -14,7 +14,7 @@ class CreateAnalysedUrlsTable extends Migration
     public function up()
     {
         Schema::create('analysed_urls', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('url');
             $table->text('article');
             $table->json('text_ru')->nullable();

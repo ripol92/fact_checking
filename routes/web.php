@@ -43,7 +43,7 @@ Auth::routes();
 Route::get('publish', function () {
     // Route logic...
 
-    Redis::publish('urls_for_parse', json_encode(['url' => 'https://vecherka.tj/archives/45957', 'lng' => 'ru']));
+    Redis::publish('urls_for_parse', json_encode(['url' => 'https://vecherka.tj/archives/46270', 'lng' => 'ru']));
 });
 
 Route::get('/test-text', function () {
