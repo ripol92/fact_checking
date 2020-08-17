@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
@@ -24,4 +25,10 @@ Auth::routes([
 
 Route::get('/home', function () {
     return Redirect::to("/nova");
+});
+
+Route::get("/test", function () {
+    $user = \App\User::with([])->findOrFail(1);
+
+    $user->notify(new \App\Notifications\FirebaseNotification([]));
 });
