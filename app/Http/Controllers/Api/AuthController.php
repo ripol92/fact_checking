@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -89,5 +90,25 @@ class AuthController extends Controller
             'token_type' => 'bearer',
             'expires_in' => auth("api")->factory()->getTTL() * 60
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function updateFirebaseToken(Request $request)
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        $this->validate($request, [
+            "firebase_token" => "required|string|max:512",
+        ]);
+
+        $user->firebase_token = $request->get("firebase_token");
+        $user->save();
+
+        return response()->json(["message" => "ok"], 200);
     }
 }

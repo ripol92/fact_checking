@@ -99,6 +99,7 @@ return [
 
     'middleware' => [
         'web',
+        'is_admin',
         Authenticate::class,
         DispatchServingNovaEvent::class,
         BootTools::class,
