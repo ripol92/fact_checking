@@ -2,10 +2,13 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\AddAndAnalyseUrl;
+use App\Nova\Actions\AnalyzeUrls;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 class AnalysedUrl extends Resource
 {
@@ -29,7 +32,7 @@ class AnalysedUrl extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'url'
     ];
 
     /**
@@ -41,9 +44,27 @@ class AnalysedUrl extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make("id")->exceptOnForms(),
+            ID::make("id")->exceptOnForms()->hideFromIndex(),
 
-            Text::make("Url"),
+            Text::make("Url", function (\App\AnalysedUrl $model) {
+                $url = $model->url;
+                return "<a href=\"$url\" target=\"_blank\">$url</a>";
+            })->asHtml(),
+
+            Text::make("Article", function (\App\AnalysedUrl $model) {
+                $article = $model->article;
+                return strlen($article) > 80 ?
+                    mb_substr($article, 0, 80) . "..."
+                    : $article;
+            })->exceptOnForms(),
+
+            Code::make("Text Ru", "text_ru")->json()
+                ->exceptOnForms()->hideFromIndex(),
+
+            Image::make("Images", function (\App\AnalysedUrl $model) {
+                $imageLinks = $model->image_links;
+                return last($imageLinks);
+            })->exceptOnForms()
         ];
     }
 
@@ -88,6 +109,9 @@ class AnalysedUrl extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            (new AnalyzeUrls()),
+            (new AddAndAnalyseUrl())
+        ];
     }
 }

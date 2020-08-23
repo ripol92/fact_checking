@@ -50,7 +50,7 @@ Route::get('/test-text', function () {
     $url = "http://api.text.ru/post";
     $client = new Client(['base_uri' => $url]);
     $data = [
-        'uid' => '5f3961bc81a23',
+        'uid' => '5f3acddf41f4a',
         'userkey' => env('TEXT_RU_KEY')
     ];
 
@@ -61,5 +61,7 @@ Route::get('/test-text', function () {
     return $response->getBody()->getContents();
 });
 
+
+Route::get('/runTextRuJobs/{uuid}', 'TextRuController@runJobs');
 
 Route::get('/home', 'HomeController@index')->name('home');

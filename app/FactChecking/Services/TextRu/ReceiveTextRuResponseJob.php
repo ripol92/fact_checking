@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Jobs;
+namespace App\FactChecking\Services\TextRu;
 
-use GuzzleHttp\Client;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
-class ReceiveTextRuResponseJob implements ShouldQueue
-{
+class ReceiveTextRuResponseJob implements ShouldQueue {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
     const ANALYSED_URLS_TABLE_NAME = 'analysed_urls';
-
+    public $tries = 3;
+    public $retryAfter = 3;
     /**
      * @var string
      */
@@ -28,8 +28,7 @@ class ReceiveTextRuResponseJob implements ShouldQueue
      * @param string $analysedUrlId
      * @param $textRuUUid
      */
-    public function __construct($analysedUrlId, $textRuUUid)
-    {
+    public function __construct($analysedUrlId, $textRuUUid) {
         //
         $this->analysedUrlId = $analysedUrlId;
         $this->textRuUUid = $textRuUUid;
@@ -39,24 +38,28 @@ class ReceiveTextRuResponseJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws Exception
      */
-    public function handle()
-    {
+    public function handle() {
+        sleep(env('TEXT_RU_PENDING_SLEEP', 10));
         $url = env("TEXT_RU_URL");
-        $client = new Client(['base_uri' => $url]);
         $data = [
             'uid' => $this->textRuUUid,
             'userkey' => env("TEXT_RU_KEY")
         ];
 
-        $response = $client->request('POST','',[
-            "form_params" => $data
-        ]);
+        $response = Http::asForm()->post($url, $data);
 
-        sleep(5);
-        $textRuResponse = $response->getBody()->getContents();
+        $responseObject = json_decode($response->body());
+        if (isset($responseObject->error_code)) {
+            throw new Exception(isset($responseObject->error_desc) ? $responseObject->error_desc : "Error with receiving text ru response");
+        }
+
+        $textRuResponse = $response->body();
+
+        printf(json_encode($textRuResponse));
         DB::table(self::ANALYSED_URLS_TABLE_NAME)
             ->where('id', $this->analysedUrlId)
-            ->update(['text_ru' => json_encode($textRuResponse)]);
+            ->update(['text_ru' => $textRuResponse]);
     }
 }

@@ -24,6 +24,8 @@ class EventServiceProvider extends ServiceProvider
 
         ArticleParsed::class => [
             SendTextRuRequest::class
+            // image check
+
         ],
 
         RequestToTextRuSent::class => [

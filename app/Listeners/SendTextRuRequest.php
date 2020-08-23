@@ -3,7 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\ArticleParsed;
-use App\Jobs\SendTextRuRequestJob;
+use App\FactChecking\Services\TextRu\SendTextRuRequestService;
+use Exception;
+use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SendTextRuRequest implements ShouldQueue {
@@ -13,10 +15,12 @@ class SendTextRuRequest implements ShouldQueue {
      * ArticleParsed $event
      * @param ArticleParsed $event
      * @return void
+     * @throws Exception
+     * @throws GuzzleException
      */
     public function handle(ArticleParsed $event) {
         $analysedUrlId = $event->getAnalysedUrlId();
 
-        dispatch(new SendTextRuRequestJob($analysedUrlId));
+        (new SendTextRuRequestService($analysedUrlId))->send();
     }
 }

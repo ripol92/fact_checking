@@ -3,9 +3,8 @@
 namespace App\Console\Commands;
 
 use App\AnalysedUrl;
-use App\Events\ArticleParsed;
 use App\FactChecking\Helpers\FastImage;
-use App\Jobs\SendTextRuRequestJob;
+use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
@@ -14,6 +13,7 @@ use Ramsey\Uuid\Uuid;
 
 class ListenParserResponse extends Command
 {
+    const RUN_TEXT_RU_JOBS_URL = "/runTextRuJobs";
     /**
      * The name and signature of the console command.
      *
@@ -66,22 +66,20 @@ class ListenParserResponse extends Command
                     continue;
                 }
                 try {
-                    Storage::put(basename($imageLink), $this->file_get_content_curl($imageLink));
+                    Storage::disk("public")->put(basename($imageLink), $this->file_get_content_curl($imageLink));
                 } catch (\Exception $e) {
                     Log::error($e->getMessage());
                     continue;
                 }
-                $imagePaths[] = Storage::url(basename($imageLink));
+                $imagePaths[] = basename($imageLink);
             }
-            $uudi = Uuid::uuid1()->toString();
-            AnalysedUrl::query()->create([
-                "id" => $uudi,
-                "url" => $url,
-                "article" => $article,
-                "image_links" => json_encode($imagePaths)
-            ]);
+            $analysedUrl = AnalysedUrl::query()->updateOrCreate(
+                ["url" => $url],
+                ["article" => $article, "image_links" => $imagePaths]
+            );
 
-            event(new ArticleParsed($uudi));
+            /** @var AnalysedUrl $analysedUrl */
+            $this->makeBlackMagicRequest($analysedUrl->id);
         });
     }
 
@@ -113,5 +111,15 @@ class ListenParserResponse extends Command
         list($width, $height) = $image->getSize();
         if ($width < 500 || $height < 500) return false;
         return true;
+    }
+
+    /**
+     * Due to the problem with redis and calling events from redis,
+     * we make http request to workaround this problem
+     * @param string $uudi
+     */
+    private function makeBlackMagicRequest(string $uudi) {
+        $client = new Client();
+        $client->get(env('APP_URL') . "" . self::RUN_TEXT_RU_JOBS_URL . "/" . $uudi);
     }
 }
