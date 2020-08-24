@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Notifications\Notification;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -19,6 +20,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property string $password
  * @property Carbon $updated_at
  * @property Carbon $created_at
+ * @property string|null $firebase_token
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -30,7 +32,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'firebase_token'
     ];
 
     /**
@@ -70,5 +72,10 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function routeNotificationForFirebase(Notification $notification)
+    {
+        return $this->firebase_token;
     }
 }

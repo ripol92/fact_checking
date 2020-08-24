@@ -60,6 +60,7 @@ class ImageCheck extends Resource
             Image::make("Input Image", function (\App\Models\ImageCheck $imgCheck) {
                 return last(explode(DIRECTORY_SEPARATOR, $imgCheck->image_path));
             })
+                ->disableDownload()
                 ->exceptOnForms(),
 
             Text::make("Message", "message")

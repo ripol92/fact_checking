@@ -58,6 +58,13 @@ class User extends Resource
                 ->sortable()
                 ->rules("required", "boolean"),
 
+            Text::make("Firebase Token", "firebase_token")
+                ->hideFromIndex()
+                ->sortable()
+                ->rules("nullable", "string", "max:255")
+                ->creationRules('unique:users,firebase_token')
+                ->updateRules('unique:users,firebase_token,{{resourceId}}'),
+
             Password::make('Password')
                 ->onlyOnForms()
                 ->creationRules('required', 'string', 'min:8')
