@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\AnalysedUrl;
+use App\Models\AnalysedUrl;
 use App\FactChecking\Helpers\FastImage;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
@@ -66,12 +66,14 @@ class ListenParserResponse extends Command
                     continue;
                 }
                 try {
-                    Storage::disk("public")->put(basename($imageLink), $this->file_get_content_curl($imageLink));
+                    $ext = explode(".", basename($imageLink));
+                    $imageName = Uuid::uuid1()->toString() . "." . last($ext);
+                    Storage::disk("public")->put($imageName, $this->file_get_content_curl($imageLink));
                 } catch (\Exception $e) {
                     Log::error($e->getMessage());
                     continue;
                 }
-                $imagePaths[] = basename($imageLink);
+                $imagePaths[] = $imageName;
             }
             $uuid = Uuid::uuid1()->toString();
             AnalysedUrl::query()->create(
@@ -111,7 +113,8 @@ class ListenParserResponse extends Command
      * @param string $imageUrl
      * @return bool
      */
-    function checkImageSize($imageUrl) {
+    function checkImageSize($imageUrl)
+    {
         $image = new FastImage($imageUrl);
         list($width, $height) = $image->getSize();
         if ($width < 500 || $height < 500) return false;
@@ -123,7 +126,8 @@ class ListenParserResponse extends Command
      * we make http request to workaround this problem
      * @param string $uudi
      */
-    private function makeBlackMagicRequest(string $uudi) {
+    private function makeBlackMagicRequest(string $uudi)
+    {
         $client = new Client();
         $client->get(env('APP_URL') . "" . self::RUN_TEXT_RU_JOBS_URL . "/" . $uudi);
     }

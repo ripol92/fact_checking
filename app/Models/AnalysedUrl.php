@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use App\Database\HasUUIDPrimaryKey;
 use Illuminate\Database\Eloquent\Model;
@@ -15,9 +15,10 @@ use Illuminate\Database\Eloquent\Model;
  * @property array|null $image_links
  * @property string|null $created_at
  * @property string|null $updated_at
- *
+ * @property boolean $text_ru_response_received
+ * @property boolean $fal_detector_finished
+ * @property boolean $notifications_send
  **/
-
 class AnalysedUrl extends Model
 {
     protected $casts = [
@@ -25,8 +26,18 @@ class AnalysedUrl extends Model
         "updated_at" => "datetime",
         "created_at" => "datetime"
     ];
+
     protected $keyType = 'string';
+
     use HasUUIDPrimaryKey;
+
     protected $guarded = [];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function imageChecks()
+    {
+        return $this->hasMany(ImageCheck::class, "identifier");
+    }
 }

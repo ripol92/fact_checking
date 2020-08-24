@@ -19,6 +19,9 @@ class CreateAnalysedUrlsTable extends Migration
             $table->text('article');
             $table->json('text_ru')->nullable();
             $table->json('image_links')->nullable();
+            $table->boolean('text_ru_response_received')->default(false);
+            $table->boolean('fal_detector_finished')->default(false);
+            $table->boolean('notifications_send')->default(false);
             $table->timestamps();
         });
     }

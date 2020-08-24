@@ -11,8 +11,10 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 
-class ReceiveTextRuResponseJob implements ShouldQueue {
+class ReceiveTextRuResponseJob implements ShouldQueue
+{
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
     const ANALYSED_URLS_TABLE_NAME = 'analysed_urls';
     public $tries = 3;
     public $retryAfter = 3;
@@ -28,7 +30,8 @@ class ReceiveTextRuResponseJob implements ShouldQueue {
      * @param string $analysedUrlId
      * @param $textRuUUid
      */
-    public function __construct($analysedUrlId, $textRuUUid) {
+    public function __construct($analysedUrlId, $textRuUUid)
+    {
         //
         $this->analysedUrlId = $analysedUrlId;
         $this->textRuUUid = $textRuUUid;
@@ -40,7 +43,8 @@ class ReceiveTextRuResponseJob implements ShouldQueue {
      * @return void
      * @throws Exception
      */
-    public function handle() {
+    public function handle()
+    {
         sleep(env('TEXT_RU_PENDING_SLEEP', 10));
         $url = env("TEXT_RU_URL");
         $data = [
@@ -59,6 +63,9 @@ class ReceiveTextRuResponseJob implements ShouldQueue {
         $resCheck = json_decode($respBody, true);
         DB::table(self::ANALYSED_URLS_TABLE_NAME)
             ->where('id', $this->analysedUrlId)
-            ->update(['text_ru' => $resCheck["result_json"]]);
+            ->update([
+                    'text_ru' => $resCheck["result_json"],
+                    'text_ru_response_received' => true]
+            );
     }
 }

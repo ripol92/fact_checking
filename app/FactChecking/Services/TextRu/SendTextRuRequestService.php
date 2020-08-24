@@ -2,10 +2,8 @@
 
 namespace App\FactChecking\Services\TextRu;
 
-use App\AnalysedUrl;
-use App\Events\RequestToTextRuSent;
+use App\Models\AnalysedUrl;
 use Exception;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Http;
 
 class SendTextRuRequestService
@@ -22,7 +20,6 @@ class SendTextRuRequestService
      */
     public function __construct($analysedUrl)
     {
-        //
         $this->analysedUrlId = $analysedUrl;
     }
 
@@ -35,9 +32,11 @@ class SendTextRuRequestService
     public function send()
     {
         $analysedUrl = AnalysedUrl::query()->find($this->analysedUrlId);
-        if (!$analysedUrl) throw new Exception("Analysed url not found");
-        $url = env('TEXT_RU_URL');
+        if (!$analysedUrl) {
+            throw new Exception("Analysed url not found");
+        }
 
+        $url = env('TEXT_RU_URL');
         $response = Http::asForm()->post($url, [
             'text' => $analysedUrl->article,
             'userkey' => env('TEXT_RU_KEY')
@@ -45,11 +44,14 @@ class SendTextRuRequestService
 
         if ($response->status() >= 200 and $response->status() < 300) {
             $responseContent = json_decode($response->body());
-            printf($response->body());
-            if (!isset($responseContent->text_uid)) throw new Exception("Request to text.ru failed. Package symbols ended.");
+            if (!isset($responseContent->text_uid)) {
+                throw new Exception("Request to text.ru failed. Package symbols ended.");
+            }
             $text_uid = $responseContent->text_uid;
 
-            event(new RequestToTextRuSent($this->analysedUrlId, $text_uid));
-        } else throw new Exception("Failed to fetch text ru");
+            dispatch(new ReceiveTextRuResponseJob($this->analysedUrlId, $text_uid));
+        } else {
+            throw new Exception("Failed to fetch text ru");
+        }
     }
 }

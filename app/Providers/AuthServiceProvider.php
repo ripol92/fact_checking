@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\AnalysedUrl;
+use App\Models\AnalysedUrl;
 use App\Models\ImageCheck;
 use App\Policies\AnalyseUrlPolicy;
 use App\Policies\ImageCheckPolicy;

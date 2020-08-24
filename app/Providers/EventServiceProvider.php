@@ -3,8 +3,7 @@
 namespace App\Providers;
 
 use App\Events\ArticleParsed;
-use App\Events\RequestToTextRuSent;
-use App\Listeners\ReceiveTextRuResponse;
+use App\Listeners\ArticleParsedFalDetectorListener;
 use App\Listeners\SendTextRuRequest;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -23,14 +22,9 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         ArticleParsed::class => [
-            SendTextRuRequest::class
-            // image check
-
+            SendTextRuRequest::class,
+            ArticleParsedFalDetectorListener::class,
         ],
-
-        RequestToTextRuSent::class => [
-            ReceiveTextRuResponse::class
-        ]
     ];
 
     /**
@@ -41,7 +35,5 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         parent::boot();
-
-        //
     }
 }

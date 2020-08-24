@@ -6,6 +6,7 @@ use App\Nova\Actions\AddAndAnalyseUrl;
 use App\Nova\Actions\AnalyzeUrls;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Code;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
@@ -17,7 +18,7 @@ class AnalysedUrl extends Resource
      *
      * @var string
      */
-    public static $model = \App\AnalysedUrl::class;
+    public static $model = \App\Models\AnalysedUrl::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -38,7 +39,7 @@ class AnalysedUrl extends Resource
     /**
      * Get the fields displayed by the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function fields(Request $request)
@@ -46,12 +47,12 @@ class AnalysedUrl extends Resource
         return [
             ID::make("id")->exceptOnForms()->hideFromIndex(),
 
-            Text::make("Url", function (\App\AnalysedUrl $model) {
+            Text::make("Url", function (\App\Models\AnalysedUrl $model) {
                 $url = $model->url;
                 return "<a href=\"$url\" target=\"_blank\">$url</a>";
             })->asHtml(),
 
-            Text::make("Article", function (\App\AnalysedUrl $model) {
+            Text::make("Article", function (\App\Models\AnalysedUrl $model) {
                 $article = $model->article;
                 return strlen($article) > 80 ?
                     mb_substr($article, 0, 80) . "..."
@@ -62,17 +63,19 @@ class AnalysedUrl extends Resource
                 ->language("javascript")
                 ->exceptOnForms()->hideFromIndex(),
 
-            Image::make("Images", function (\App\AnalysedUrl $model) {
+            Image::make("Images", function (\App\Models\AnalysedUrl $model) {
                 $imageLinks = $model->image_links;
                 return last($imageLinks);
-            })->exceptOnForms()
+            })->exceptOnForms(),
+
+            HasMany::make("Image Check", "imageChecks", ImageCheck::class),
         ];
     }
 
     /**
      * Get the cards available for the request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function cards(Request $request)
@@ -83,7 +86,7 @@ class AnalysedUrl extends Resource
     /**
      * Get the filters available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function filters(Request $request)
@@ -94,7 +97,7 @@ class AnalysedUrl extends Resource
     /**
      * Get the lenses available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function lenses(Request $request)
@@ -105,7 +108,7 @@ class AnalysedUrl extends Resource
     /**
      * Get the actions available for the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function actions(Request $request)
