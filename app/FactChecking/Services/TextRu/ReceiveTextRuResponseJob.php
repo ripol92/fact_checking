@@ -50,16 +50,15 @@ class ReceiveTextRuResponseJob implements ShouldQueue {
 
         $response = Http::asForm()->post($url, $data);
 
-        $responseObject = json_decode($response->body());
+        $respBody = $response->body();
+        $responseObject = json_decode($respBody);
         if (isset($responseObject->error_code)) {
             throw new Exception(isset($responseObject->error_desc) ? $responseObject->error_desc : "Error with receiving text ru response");
         }
 
-        $textRuResponse = $response->body();
-
-        printf(json_encode($textRuResponse));
+        $resCheck = json_decode($respBody, true);
         DB::table(self::ANALYSED_URLS_TABLE_NAME)
             ->where('id', $this->analysedUrlId)
-            ->update(['text_ru' => $textRuResponse]);
+            ->update(['text_ru' => $resCheck["result_json"]]);
     }
 }

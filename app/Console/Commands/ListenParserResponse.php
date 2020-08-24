@@ -73,13 +73,18 @@ class ListenParserResponse extends Command
                 }
                 $imagePaths[] = basename($imageLink);
             }
-            $analysedUrl = AnalysedUrl::query()->updateOrCreate(
-                ["url" => $url],
-                ["article" => $article, "image_links" => $imagePaths]
+            $uuid = Uuid::uuid1()->toString();
+            AnalysedUrl::query()->create(
+                [
+                    "id" => $uuid,
+                    "url" => $url,
+                    "article" => $article,
+                    "image_links" => $imagePaths
+                ]
             );
 
             /** @var AnalysedUrl $analysedUrl */
-            $this->makeBlackMagicRequest($analysedUrl->id);
+            $this->makeBlackMagicRequest($uuid);
         });
     }
 

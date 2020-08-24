@@ -58,7 +58,8 @@ class AnalysedUrl extends Resource
                     : $article;
             })->exceptOnForms(),
 
-            Code::make("Text Ru", "text_ru")->json()
+            Code::make("Text Ru (plagiat urls)", "text_ru")
+                ->language("javascript")
                 ->exceptOnForms()->hideFromIndex(),
 
             Image::make("Images", function (\App\AnalysedUrl $model) {

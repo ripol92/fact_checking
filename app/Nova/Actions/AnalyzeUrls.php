@@ -8,9 +8,10 @@ use Brightspot\Nova\Tools\DetachedActions\DetachedAction;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
+use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 
-class AnalyzeUrls extends DetachedAction
+class AnalyzeUrls extends Action
 {
     use InteractsWithQueue, Queueable;
 
