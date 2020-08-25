@@ -4,6 +4,20 @@ namespace App\Models;
 
 use App\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
+
+/**
+ * Class MarkedItem
+ * @package App\Models
+ * @property string $link
+ * @property string $description
+ * @property string $title
+ * @property string $lang
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $date
+ * @property boolean $is_analyzed
+ */
 
 class MarkedItem extends Model
 {

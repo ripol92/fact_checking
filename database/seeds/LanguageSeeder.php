@@ -23,7 +23,7 @@ class LanguageSeeder extends Seeder
                 'order' => 2
             ],
             [
-                'name' => 'tj',
+                'name' => 'tg',
                 'display_name' => 'Tajik',
                 'order' => 3
             ],

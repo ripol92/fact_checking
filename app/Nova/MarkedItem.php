@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Models\UserMarkedItem;
+use App\Nova\Actions\AnalyzeUrls;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
@@ -51,6 +52,7 @@ class MarkedItem extends Resource
             Text::make('Title')->sortable()->hideFromIndex(),
             Text::make('Description')->sortable()->hideFromIndex(),
             Text::make('Link')->sortable(),
+            Text::make('Language', 'lang')->sortable(),
             Date::make('Date')->sortable(),
             Boolean::make('Is Analyzed')->sortable(),
             HasOne::make('Analysed Result', 'analyzedResult', AnalysedUrl::class),
@@ -106,6 +108,6 @@ class MarkedItem extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [ new AnalyzeUrls() ];
     }
 }
