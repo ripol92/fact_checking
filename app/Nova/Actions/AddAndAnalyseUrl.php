@@ -9,6 +9,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Fields\ActionFields;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 
 class AddAndAnalyseUrl extends DetachedAction
@@ -31,7 +32,7 @@ class AddAndAnalyseUrl extends DetachedAction
         }
 
         $urlToParserSender = new SendUrlToParser();
-        $urlToParserSender->send($url);
+        $urlToParserSender->send($url, $fields->get('lng'));
     }
 
     /**
@@ -42,7 +43,12 @@ class AddAndAnalyseUrl extends DetachedAction
     public function fields()
     {
         return [
-            Text::make("Url", "url")
+            Text::make("Url", "url")->required(),
+            Select::make('Language', "lng")->options([
+                'ru' => 'Russian',
+                'tg' => 'Tajik',
+                'en' => 'English',
+            ])->required()
         ];
     }
 }
