@@ -37,4 +37,9 @@ class MarkedItem extends Model
     {
         return $this->belongsToMany(User::class,'user_analyzed_item');
     }
+
+    public function analyzedResult()
+    {
+        return $this->hasOne(AnalysedUrl::class, 'url', 'link');
+    }
 }

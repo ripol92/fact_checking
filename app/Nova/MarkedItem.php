@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
+use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -52,6 +53,7 @@ class MarkedItem extends Resource
             Text::make('Link')->sortable(),
             Date::make('Date')->sortable(),
             Boolean::make('Is Analyzed')->sortable(),
+            HasOne::make('Analysed Result', 'analyzedResult', AnalysedUrl::class),
             HasMany::make('Favorites', 'users', User::class),
             HasMany::make('Analyses', 'analyzedUsers', User::class),
             DateTime::make("Created At")
