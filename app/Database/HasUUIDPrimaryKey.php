@@ -21,5 +21,15 @@ trait HasUUIDPrimaryKey
                 $model->id = Uuid::uuid1()->toString();
             }
         });
+        static::creating(function ($model) {
+            if (is_null($model->id)) {
+                $model->id = Uuid::uuid1()->toString();
+            }
+        });
+        static::updating(function ($model) {
+            if (is_null($model->id)) {
+                $model->id = Uuid::uuid1()->toString();
+            }
+        });
     }
 }

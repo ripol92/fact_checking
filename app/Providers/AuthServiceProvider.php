@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\AnalysedUrl;
+use App\Models\ImageCheck;
+use App\Policies\AnalyseUrlPolicy;
+use App\Policies\ImageCheckPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -13,7 +16,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+        ImageCheck::class => ImageCheckPolicy::class,
+        AnalysedUrl::class => AnalyseUrlPolicy::class
     ];
 
     /**

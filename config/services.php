@@ -30,4 +30,8 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'fake_img_detector' => [
+        'publish_chan' => env('FAKE_IMAGE_PUBLISH_CHANNEL'),
+        'receive_chan' => env('FAKE_IMAGE_RECEIVE_RESULTS_CHANNEL')
+    ]
 ];

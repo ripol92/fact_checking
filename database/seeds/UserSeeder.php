@@ -8,7 +8,7 @@ class UserSeeder extends \Illuminate\Database\Seeder
         \App\User::create([
             "name" => "John Doe",
             "email" => "john.doe@mail.com",
-            "password" => \Illuminate\Support\Facades\Hash::make("fuCkeck!NG_%@"),
+            "password" => \Illuminate\Support\Facades\Hash::make("secret"),
             "is_admin" => true,
         ]);
 
