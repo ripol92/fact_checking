@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Models\MarkedItem;
+use App\Models\UserMarkedItem;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -72,6 +74,16 @@ class User extends Authenticatable implements JWTSubject
     public function getJWTCustomClaims()
     {
         return [];
+    }
+
+    public function userMarkedItem()
+    {
+        return $this->hasMany(UserMarkedItem::class);
+    }
+
+    public function markedNews()
+    {
+        return $this->belongsToMany(MarkedItem::class, 'user_marked_item');
     }
 
     public function routeNotificationForFirebase(Notification $notification)

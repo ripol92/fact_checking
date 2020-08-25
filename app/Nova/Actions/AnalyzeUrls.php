@@ -4,6 +4,7 @@ namespace App\Nova\Actions;
 
 use App\Models\AnalysedUrl;
 use App\FactChecking\Services\SendUrlToParser;
+use App\Models\MarkedItem;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
@@ -25,13 +26,13 @@ class AnalyzeUrls extends Action
     {
         $urlToParserSender = new SendUrlToParser();
         foreach ($models as $model) {
-            /** @var AnalysedUrl $model */
-            if (!filter_var($model->url, FILTER_VALIDATE_URL)) {
+            /** @var MarkedItem $model */
+            if (!filter_var($model->link, FILTER_VALIDATE_URL)) {
                 continue;
             }
-            $url = $model->url;
+            $url = $model->link;
 
-            $urlToParserSender->send($url);
+            $urlToParserSender->send($url, $model->lang);
         }
     }
 
