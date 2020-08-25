@@ -16,12 +16,12 @@ class CreateUserAnalyzedItemTable extends Migration
         Schema::create('user_analyzed_item', function (Blueprint $table) {
             $table->increments('id');
             $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('analyzed_item_id')->unsigned();
+            $table->bigInteger('marked_item_id')->unsigned();
 
             $table->foreign('user_id')->references('id')
                 ->on('users')->onDelete('cascade');
 
-            $table->foreign('analyzed_item_id')->references('id')
+            $table->foreign('marked_item_id')->references('id')
                 ->on('marked_items')->onDelete('cascade');
         });
     }

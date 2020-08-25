@@ -16,6 +16,8 @@ class MarkedItem extends Model
         'is_analyzed',
     ];
 
+    protected $casts = ['date'=>'date', 'created_at'=>'datetime', 'updated_at'=>'datetime'];
+
     public function userMarkedItem()
     {
         return $this->hasMany(UserMarkedItem::class);

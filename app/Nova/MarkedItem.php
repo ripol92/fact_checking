@@ -2,9 +2,12 @@
 
 namespace App\Nova;
 
+use App\Models\UserMarkedItem;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -44,12 +47,19 @@ class MarkedItem extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('title'),
-            Text::make('description'),
-            Text::make('link'),
-            Date::make('date'),
-            DateTime::make('created_at'),
-            DateTime::make('updated_at')
+            Text::make('Title')->sortable()->hideFromIndex(),
+            Text::make('Description')->sortable()->hideFromIndex(),
+            Text::make('Link')->sortable(),
+            Date::make('Date')->sortable(),
+            Boolean::make('Is Analyzed')->sortable(),
+            HasMany::make('Favorites', 'users', User::class),
+            HasMany::make('Analyses', 'analyzedUsers', User::class),
+            DateTime::make("Created At")
+                ->sortable()
+                ->exceptOnForms(),
+            DateTime::make("Updated At")
+                ->sortable()
+                ->exceptOnForms()->hideFromIndex()
         ];
     }
 

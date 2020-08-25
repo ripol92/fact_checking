@@ -18,6 +18,6 @@ class UserAnalyzedItem extends Model
 
     public function analyzedItem()
     {
-        return $this->belongsTo(MarkedItem::class, 'analyzed_item_id');
+        return $this->belongsTo(MarkedItem::class, 'marked_item_id');
     }
 }

@@ -158,7 +158,7 @@ class FeedController extends Controller
 //                    'msg' => 'Item is already Analyzed',
 //                ], 408 );
 //            }
-            $userMarkedItemExist = UserAnalyzedItem::where('user_id', 1)->where('analyzed_item_id', $item->id)->exists();
+            $userMarkedItemExist = UserAnalyzedItem::where('user_id', 1)->where('marked_item_id', $item->id)->exists();
             if($userMarkedItemExist) {
                 return response()->json([
                     'msg' => 'Record is already Exist',

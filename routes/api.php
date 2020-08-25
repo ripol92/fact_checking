@@ -19,6 +19,17 @@ $androidAppRoutes = [
 ];
 Route::group($androidAppRoutes, function () {
     Route::post("/create", "UserController@store");
+});
+
+
+
+$newsGroup = [
+  "middleware" => ["auth:api"],
+  "namespace" => "Api",
+  "prefix" => "/news"
+];
+
+Route::group($newsGroup, function () {
     Route::get("/news", "FeedController@getNews");
     Route::post("/like-item", "FeedController@likeItem");
     Route::post("/dislike-item", "FeedController@dislikeItem");
@@ -26,4 +37,3 @@ Route::group($androidAppRoutes, function () {
     Route::post("/analyze-item", "FeedController@analyzeItem");
     Route::get("/analyzed-news", "FeedController@getUserAnalyzedNews");
 });
-
