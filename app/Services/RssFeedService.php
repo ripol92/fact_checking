@@ -5,14 +5,15 @@ namespace App\Services;
 use App\Models\Language;
 use App\Models\RssFeedResource;
 use Feed;
+use Illuminate\Support\Facades\Log;
 
 class RssFeedService
 {
-    public static function allRssFeedNews($attributes = null)
+    public static function allRssFeedNews($lang = null)
     {
         $news = [];
 
-        $languages = isset($attributes->lang) ? Language::where('name', $attributes->lang) : Language::all();
+        $languages = $lang ? Language::where('name', $lang) : Language::all();
         $languages = $languages->pluck('id');
         $rssFeedResources = RssFeedResource::whereIn('language_id', $languages)->get();
 
@@ -20,6 +21,7 @@ class RssFeedService
             try {
                 $rss = Feed::loadRss($rssFeedResource->link);
             } catch (\Exception $e) {
+                Log::error($e->getMessage());
                 // Здесь можно логировать ошибки, если что
                 continue;
             }
@@ -35,6 +37,6 @@ class RssFeedService
             }
         }
 
-        return compact('news');
+        return $news;
     }
 }

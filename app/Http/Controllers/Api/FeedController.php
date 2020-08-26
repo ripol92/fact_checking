@@ -30,11 +30,22 @@ class FeedController extends Controller
             "limit" => "integer|nullable",
         ]);
         $this->req = $request;
-        $allRssFeedNews = Cache::get('news', function () {
+
+        $name = $request->get("lang") ? $request->get("lang")."-news" : "ru-news";
+
+        $allRssFeedNews = Cache::get($name, function () {
             return RssFeedService::allRssFeedNews($this->req);
         });
 
-        return $allRssFeedNews;
+        $limit = $request->get("limit") ? $request->get("limit") : 100;
+
+        $news = [];
+
+        for($i=0; $i<=$limit; $i++) {
+           array_push($news, $allRssFeedNews[$i]);
+        }
+
+        return $news;
     }
 
 
