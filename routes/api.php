@@ -21,8 +21,6 @@ Route::group($androidAppRoutes, function () {
     Route::post("/create", "UserController@store");
 });
 
-
-
 $newsGroup = [
   "middleware" => ["auth:api"],
   "namespace" => "Api",
@@ -30,10 +28,10 @@ $newsGroup = [
 ];
 
 Route::group($newsGroup, function () {
-    Route::get("/news", "FeedController@getNews");
-    Route::post("/like-item", "FeedController@likeItem");
-    Route::post("/dislike-item", "FeedController@dislikeItem");
-    Route::get("/liked-news", "FeedController@getUserLikedNews");
-    Route::post("/analyze-item", "FeedController@analyzeItem");
-    Route::get("/analyzed-news", "FeedController@getUserAnalyzedNews");
+    Route::get("/", "FeedController@getNews");
+    Route::post("/add-to-favorites", "FeedController@likeItem");
+    Route::post("/delete-from-favorites", "FeedController@dislikeItem");
+    Route::get("/favorites", "FeedController@getUserLikedNews");
+    Route::post("/add-to-analyzed", "FeedController@analyzeItem");
+    Route::get("/analyzed", "FeedController@getUserAnalyzedNews");
 });
