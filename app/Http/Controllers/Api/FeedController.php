@@ -9,14 +9,11 @@ use App\Models\UserMarkedItem;
 use App\Services\RssFeedService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Tymon\JWTAuth\Facades\JWTAuth;
 
 class FeedController extends Controller
 {
-    private $req;
 
     /**
      * @param Request $request
@@ -29,12 +26,12 @@ class FeedController extends Controller
             "lang" => "string|nullable",
             "limit" => "integer|nullable",
         ]);
-        $this->req = $request;
 
-        $name = $request->get("lang") ? $request->get("lang")."-news" : "ru-news";
+        $language =  $request->get("lang") ? $request->get("lang") : "ru";
+        $name = $language."-news";
 
-        $allRssFeedNews = Cache::get($name, function () {
-            return RssFeedService::allRssFeedNews($this->req);
+        $allRssFeedNews = Cache::get($name, function () use ($language) {
+            return RssFeedService::allRssFeedNews($language);
         });
 
         $limit = $request->get("limit") ? $request->get("limit") : 100;
