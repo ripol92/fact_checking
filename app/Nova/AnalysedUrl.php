@@ -63,6 +63,9 @@ class AnalysedUrl extends Resource
                 ->language("javascript")
                 ->exceptOnForms()->hideFromIndex(),
 
+            Code::make("Adjectives analyse", "adjectives_analyse")
+                ->exceptOnForms()->hideFromIndex()->json(),
+
             Image::make("Images", function (\App\Models\AnalysedUrl $model) {
                 $imageLinks = $model->image_links;
                 return last($imageLinks);

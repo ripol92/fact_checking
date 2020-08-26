@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $id
  * @property string|null $url
  * @property string $article
+ * @property string $lng
+ * @property string $adjectives_analyse json
  * @property string $text_ru json
  * @property array|null $image_links
  * @property string|null $created_at
@@ -23,6 +25,7 @@ class AnalysedUrl extends Model
 {
     protected $casts = [
         'image_links' => 'array',
+        "adjectives_analyse" => "json",
         "updated_at" => "datetime",
         "created_at" => "datetime"
     ];

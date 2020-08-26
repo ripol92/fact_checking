@@ -49,6 +49,7 @@ class ListenParserResponse extends Command
             $data = json_decode($message);
             $url = $data->url;
             $article = $data->article;
+            $lng = $data->lng;
             $imageLinks = $data->image_links;
             $imagePaths = [];
 
@@ -81,7 +82,8 @@ class ListenParserResponse extends Command
                     "id" => $uuid,
                     "url" => $url,
                     "article" => $article,
-                    "image_links" => $imagePaths
+                    "image_links" => $imagePaths,
+                    "lng" => $lng
                 ]
             );
 

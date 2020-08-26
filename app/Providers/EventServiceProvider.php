@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\ArticleParsed;
+use App\Listeners\AnalyseAdjectives;
 use App\Listeners\ArticleParsedFalDetectorListener;
 use App\Listeners\SendTextRuRequest;
 use Illuminate\Auth\Events\Registered;
@@ -24,6 +25,7 @@ class EventServiceProvider extends ServiceProvider
         ArticleParsed::class => [
             SendTextRuRequest::class,
             ArticleParsedFalDetectorListener::class,
+            AnalyseAdjectives::class
         ],
     ];
 

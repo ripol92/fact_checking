@@ -16,3 +16,6 @@ Route::get('/runTextRuJobs/{uuid}', 'TextRuController@runJobs');
 Route::get('/home', function () {
     return Redirect::to("/nova");
 });
+
+Route::get('test', function () {
+});
