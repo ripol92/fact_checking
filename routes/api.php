@@ -21,8 +21,6 @@ Route::group($androidAppRoutes, function () {
     Route::post("/create", "UserController@store");
 });
 
-
-
 $newsGroup = [
   "middleware" => ["auth:api"],
   "namespace" => "Api",
