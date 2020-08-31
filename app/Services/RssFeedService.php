@@ -24,7 +24,7 @@ class RssFeedService {
                 continue;
             }
             foreach ($rss->item as $item) {
-                $img = "";
+                $img = "no image";
                 $firstFeed = reset($item->{'content:encoded'});
                 if ($firstFeed) {
                     $all = [];
