@@ -45,6 +45,24 @@ class FeedController extends Controller
         return $news;
     }
 
+    public function getFactCheckTjNews(Request $request)
+    {
+        $this->validate($request, [
+            "lang" => "string|nullable"
+        ]);
+
+        $language =  $request->get("lang") ? $request->get("lang") : "ru";
+        $name = "factcheck-".$language."-news";
+
+        $source = $language=='ru' ? ['factcheck.tj/ru/feed'] : ['factcheck.tj/feed'];
+
+        $feedNews = Cache::get($name, function () use ($language, $source) {
+            return RssFeedService::allRssFeedNews($language, $source);
+        });
+
+        return $feedNews;
+    }
+
 
     /**
      * @param Request $request
