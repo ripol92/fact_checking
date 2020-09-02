@@ -39,7 +39,8 @@ class RssFeedService {
                     'link' => strip_tags($item->link),
                     'date' => date("Y-m-d h:i:sa", strip_tags($item->timestamp)),
                     'lang' => isset($rssFeedResource->language) ? $rssFeedResource->language->name : $lang,
-//                    'html_encoded' => $item->{'content:encoded'}
+                    'html_encoded' => $firstFeed,
+                    'source' => isset($rssFeedResource->display_name) ? $rssFeedResource->display_name : 'FactCheck.Tj',
                     "img" => $img
                 ];
             }

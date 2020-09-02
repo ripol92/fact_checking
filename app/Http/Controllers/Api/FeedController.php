@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\DB;
 
 class FeedController extends Controller
 {
+    CONST FACT_CHECK_TJ = [
+        'ru' => ['factcheck.tj/ru/feed'],
+        'tg' => ['factcheck.tj/feed']
+    ];
 
     /**
      * @param Request $request
@@ -54,7 +58,7 @@ class FeedController extends Controller
         $language =  $request->get("lang") ? $request->get("lang") : "ru";
         $name = "factcheck-".$language."-news";
 
-        $source = $language=='ru' ? ['factcheck.tj/ru/feed'] : ['factcheck.tj/feed'];
+        $source = self::FACT_CHECK_TJ[$language];
 
         $feedNews = Cache::get($name, function () use ($language, $source) {
             return RssFeedService::allRssFeedNews($language, $source);
