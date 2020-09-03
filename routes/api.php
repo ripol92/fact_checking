@@ -28,7 +28,8 @@ $newsGroup = [
 ];
 
 Route::group($newsGroup, function () {
-    Route::get("/", "FeedController@getNews");
+    Route::get("/all", "FeedController@getNews");
+    Route::get("/fact-check/all", "FeedController@getFactCheckTjNews");
     Route::post("/add-to-favorites", "FeedController@likeItem");
     Route::post("/delete-from-favorites", "FeedController@dislikeItem");
     Route::get("/favorites", "FeedController@getUserLikedNews");

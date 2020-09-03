@@ -8,23 +8,23 @@ use Feed;
 use Illuminate\Support\Facades\Log;
 
 class RssFeedService {
-    public static function allRssFeedNews($lang = null) {
-        $news = [];
 
+    public static function allRssFeedNews($lang = null, $sources=[]) {
+        $news = [];
         $languages = $lang ? Language::where('name', $lang) : Language::all();
         $languages = $languages->pluck('id');
-        $rssFeedResources = RssFeedResource::whereIn('language_id', $languages)->get();
+        $rssFeedResources = count($sources)>0 ? $sources : RssFeedResource::whereIn('language_id', $languages)->get();
 
         foreach ($rssFeedResources as $rssFeedResource) {
             try {
-                $rss = Feed::loadRss($rssFeedResource->link);
+                $rss = Feed::loadRss(isset($rssFeedResource->link) ? $rssFeedResource->link : $rssFeedResource);
             } catch (\Exception $e) {
                 Log::error($e->getMessage());
                 // Здесь можно логировать ошибки, если что
                 continue;
             }
             foreach ($rss->item as $item) {
-                $img = "";
+                $img = "no image";
                 $firstFeed = reset($item->{'content:encoded'});
                 if ($firstFeed) {
                     $all = [];
@@ -38,8 +38,9 @@ class RssFeedService {
                     'description' => strip_tags($item->description),
                     'link' => strip_tags($item->link),
                     'date' => date("Y-m-d h:i:sa", strip_tags($item->timestamp)),
-                    'lang' => $rssFeedResource->language->name,
-//                    'html_encoded' => $item->{'content:encoded'}
+                    'lang' => isset($rssFeedResource->language) ? $rssFeedResource->language->name : $lang,
+                    'html_encoded' => $firstFeed,
+                    'source' => isset($rssFeedResource->display_name) ? $rssFeedResource->display_name : 'FactCheck.Tj',
                     "img" => $img
                 ];
             }
