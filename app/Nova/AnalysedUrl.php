@@ -7,7 +7,6 @@ use App\Nova\Actions\AddAndAnalyseUrl;
 use App\Nova\Actions\AnalyzeUrls;
 use Exception;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
@@ -27,7 +26,7 @@ class AnalysedUrl extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'url';
 
     /**
      * The columns that should be searched.
