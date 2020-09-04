@@ -277,7 +277,7 @@ class RssFeedResourceSeeder extends Seeder
             ],
             [
                 'name' => 'factcheck',
-                'display_name' => 'FactCheck',
+                'display_name' => 'FactCheckTj',
                 'link' => 'factcheck.tj/ru/feed',
                 'order' => 33,
                 'language_id' => self::RUSSIAN_LANGUAGE_ID,
@@ -285,7 +285,7 @@ class RssFeedResourceSeeder extends Seeder
             ],
             [
                 'name' => 'factcheck',
-                'display_name' => 'FactCheck',
+                'display_name' => 'FactCheckTj',
                 'link' => 'factcheck.tj/feed',
                 'order' => 32,
                 'language_id' => self::TAJIK_LANGUAGE_ID,
