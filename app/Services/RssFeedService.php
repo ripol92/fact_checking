@@ -47,8 +47,5 @@ class RssFeedService {
         }
 
         DB::table("marked_items")->insertOrIgnore($news);
-
-        $news = DB::table("marked_items");
-        return $news;
     }
 }

@@ -8,16 +8,16 @@ use App\Models\UserAnalyzedItem;
 use App\Models\UserMarkedItem;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class FeedController extends Controller
 {
     CONST FACT_CHECK_SOURCE_NAME = 'FactCheckTj';
 
+
     /**
      * @param Request $request
-     * @return array
+     * @return \Illuminate\Contracts\Pagination\Paginator
      * @throws \Illuminate\Validation\ValidationException
      */
     public function getNews(Request $request)
@@ -30,24 +30,26 @@ class FeedController extends Controller
         $language =  $request->get("lang") ? $request->get("lang") : "ru";
         $perPage =  $request->get("per_page") ? $request->get("per_page") : 50;
 
-        $allNews = Cache::get('news', function () {
-            return DB::table('marked_items');
-        });
+        $news = DB::table('marked_items')->where('lang', $language)
+            ->orderBy('date','desc')->simplePaginate($perPage);
 
-        return $allNews->where('lang', $language)->orderBy('date','desc')->simplePaginate($perPage);
+        return $news;
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Pagination\Paginator
+     */
     public function getFactCheckTjNews(Request $request)
     {
         $language =  $request->get("lang") ? $request->get("lang") : "ru";
         $perPage =  $request->get("per_page") ? $request->get("per_page") : 40;
 
-        $allNews = Cache::get('news', function () {
-            return DB::table('marked_items');
-        });
-
-        return $allNews->where('source', self::FACT_CHECK_SOURCE_NAME)->where('lang', $language)->orderBy('date','desc')
+        $news = DB::table('marked_items')->where('source', self::FACT_CHECK_SOURCE_NAME)
+            ->where('lang', $language)->orderBy('date','desc')
             ->simplePaginate($perPage);
+
+        return $news;
     }
 
 

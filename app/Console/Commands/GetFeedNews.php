@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Jobs\GetFeedNewsJob;
 use Illuminate\Console\Command;
 
-class CacheFeedNews extends Command
+class GetFeedNews extends Command
 {
     /**
      * The name and signature of the console command.

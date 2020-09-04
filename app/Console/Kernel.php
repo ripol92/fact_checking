@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Console\Commands\CacheFeedNews;
+use App\Console\Commands\GetFeedNews;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        CacheFeedNews::class
+        GetFeedNews::class
     ];
 
     /**
@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
-        $schedule->command('feed_news:cache')->cron('0 */1 * * *'); // every hour;
+        $schedule->command('feed_news:get')->everyTenMinutes();
     }
 
     /**
