@@ -30,8 +30,9 @@ class FeedController extends Controller
         $language =  $request->get("lang") ? $request->get("lang") : "ru";
         $perPage =  $request->get("per_page") ? $request->get("per_page") : 50;
 
-        $news = DB::table('marked_items')->where('lang', $language)
-            ->orderBy('date','desc')->simplePaginate($perPage);
+        $news = DB::table('marked_items')->where('source', '!=',self::FACT_CHECK_SOURCE_NAME)
+            ->where('lang', $language)->orderBy('date','desc')
+            ->simplePaginate($perPage);
 
         return $news;
     }
