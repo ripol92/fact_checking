@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')->hourly();
 
-        $schedule->command('feed_news:cache')->everyTenMinutes();
+        $schedule->command('feed_news:cache')->cron('0 */1 * * *'); // every hour;
     }
 
     /**

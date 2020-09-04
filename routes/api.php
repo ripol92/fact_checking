@@ -22,7 +22,7 @@ Route::group($androidAppRoutes, function () {
 });
 
 $newsGroup = [
-  "middleware" => ["auth:api"],
+//  "middleware" => ["auth:api"],
   "namespace" => "Api",
   "prefix" => "/news"
 ];

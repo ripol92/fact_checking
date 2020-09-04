@@ -31,20 +31,8 @@ class GetFeedNewsJob implements ShouldQueue
      */
     public function handle()
     {
-        Cache::remember('ru-news', now()->addMinutes(10), function () {
-            return RssFeedService::allRssFeedNews('ru');
-        });
-        Cache::remember('tg-news', now()->addMinutes(10), function () {
-            return RssFeedService::allRssFeedNews('tg');
-        });
-        Cache::remember('en-news', now()->addMinutes(10), function () {
-            return RssFeedService::allRssFeedNews('en');
-        });
-        Cache::remember('factcheck-tg-news', now()->addMinutes(10), function () {
-            return RssFeedService::allRssFeedNews('tg', ['factcheck.tj/feed']);
-        });
-        Cache::remember('factcheck-ru-news', now()->addMinutes(10), function () {
-            return RssFeedService::allRssFeedNews('ru', ['factcheck.tj/ru/feed']);
+        Cache::remember('news', now()->addHour(), function () {
+            return RssFeedService::allRssFeedNews();
         });
     }
 }
