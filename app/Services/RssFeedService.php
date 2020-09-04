@@ -7,15 +7,16 @@ use Feed;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class RssFeedService {
+class RssFeedService
+{
 
-    public static function allRssFeedNews() {
-
+    public static function allRssFeedNews()
+    {
+        $now = now()->toDateTimeString();
         $news = [];
         $rssFeedResources = RssFeedResource::with("language")->get();
 
         foreach ($rssFeedResources as $rssFeedResource) {
-
             try {
                 $rss = Feed::loadRss($rssFeedResource->link);
             } catch (\Exception $e) {
@@ -23,6 +24,7 @@ class RssFeedService {
                 Log::error($e->getMessage());
                 continue;
             }
+
             foreach ($rss->item as $item) {
                 $img = "no image";
                 $firstFeed = reset($item->{"content:encoded"});
@@ -32,6 +34,11 @@ class RssFeedService {
                     if (sizeof($all) > 0) {
                         $img = reset($all);
                     }
+                } else {
+                    try {
+                        $img = (string)$item->enclosure->attributes()["url"];
+                    } catch (\Exception $e) {
+                    }
                 }
                 $news[] = [
                     "title" => strip_tags($item->title),
@@ -39,13 +46,14 @@ class RssFeedService {
                     "link" => strip_tags($item->link),
                     "date" => date("Y-m-d h:i:sa", strip_tags($item->timestamp)),
                     "lang" => $rssFeedResource->language->name,
-                    "html_encoded" => $firstFeed,
+                    "html_encoded" => $firstFeed ? $firstFeed : "no html encoded",
                     "source" => $rssFeedResource->display_name,
                     "img" => $img,
+                    "created_at" => $now,
+                    "updated_at" => $now,
                 ];
             }
         }
-
         DB::table("marked_items")->insertOrIgnore($news);
     }
 }
