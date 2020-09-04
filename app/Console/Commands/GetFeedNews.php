@@ -12,7 +12,7 @@ class GetFeedNews extends Command
      *
      * @var string
      */
-    protected $signature = 'feed_news:cache';
+    protected $signature = 'news:get';
 
     /**
      * The console command description.
