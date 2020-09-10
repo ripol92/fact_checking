@@ -10,6 +10,7 @@ Route::group($authGroup, function () {
     Route::post("login", "AuthController@login");
     Route::get("me", "AuthController@me");
     Route::post("update_firebase_token", "AuthController@updateFirebaseToken");
+    Route::post("update_personal_info", "AuthController@updatePersonalInfo");
 });
 
 $androidAppRoutes = [
@@ -22,9 +23,9 @@ Route::group($androidAppRoutes, function () {
 });
 
 $newsGroup = [
-  "middleware" => ["auth:api"],
-  "namespace" => "Api",
-  "prefix" => "/news"
+    "middleware" => ["auth:api"],
+    "namespace" => "Api",
+    "prefix" => "/news"
 ];
 
 Route::group($newsGroup, function () {

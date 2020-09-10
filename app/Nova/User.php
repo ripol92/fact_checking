@@ -80,6 +80,27 @@ class User extends Resource
                 ->creationRules('unique:users,firebase_token')
                 ->updateRules('unique:users,firebase_token,{{resourceId}}'),
 
+            Text::make("Phone Number", "phone_number")
+                ->hideFromIndex()
+                ->sortable()
+                ->rules("nullable", "string", "regex:/\+?[0-9]{7,9}/")
+                ->creationRules('unique:users,phone_number')
+                ->updateRules('unique:users,phone_number,{{resourceId}}'),
+
+            Text::make("Facebook link", "facebook_link")
+                ->hideFromIndex()
+                ->sortable()
+                ->rules("nullable", "string", "max:255")
+                ->creationRules('unique:users,facebook_link')
+                ->updateRules('unique:users,facebook_link,{{resourceId}}'),
+
+            Text::make("Telegram Account", "telegram_account")
+                ->hideFromIndex()
+                ->sortable()
+                ->rules("nullable", "string")
+                ->creationRules('unique:users,telegram_account')
+                ->updateRules('unique:users,telegram_account,{{resourceId}}'),
+
             Password::make('Password')
                 ->onlyOnForms()
                 ->creationRules('required', 'string', 'min:8')

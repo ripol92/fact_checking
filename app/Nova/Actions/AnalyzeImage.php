@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Fields\ActionFields;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Image;
 
 class AnalyzeImage extends DetachedAction
@@ -17,7 +18,6 @@ class AnalyzeImage extends DetachedAction
      *
      * @param \Laravel\Nova\Fields\ActionFields $fields
      * @param \Illuminate\Support\Collection $models
-     * @return mixed
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      * @throws \Exception
      */
@@ -32,7 +32,8 @@ class AnalyzeImage extends DetachedAction
         $imagePath = storage_path("app" . DIRECTORY_SEPARATOR . "public" . DIRECTORY_SEPARATOR . $file->hashName());
 
         Artisan::call("tools:analyze-image", [
-            "image_path" => $imagePath
+            "image_path" => $imagePath,
+            "--no_crop" => !$fields->get("crop_face"),
         ]);
     }
 
@@ -40,7 +41,10 @@ class AnalyzeImage extends DetachedAction
     {
         return [
             Image::make("Input Image", "input_img")
-                ->rules(["required", "mimes:jpg,jpeg,png"])
+                ->rules(["required", "mimes:jpg,jpeg,png"]),
+
+            Boolean::make("Crop Face", "crop_face")
+                ->rules(["required"])
         ];
     }
 }

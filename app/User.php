@@ -23,6 +23,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * @property Carbon|string $created_at
  * @property string|null $firebase_token
  * @property MarkedItem[] $markedNews
+ * @property string|null $phone_number
+ * @property string|null $facebook_link
+ * @property string|null $telegram_account
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -34,7 +37,13 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'firebase_token'
+        'name',
+        'email',
+        'password',
+        'firebase_token',
+        'phone_number',
+        'facebook_link',
+        'telegram_account'
     ];
 
     /**
