@@ -28,6 +28,10 @@ class MarkedItem extends Model
         'date',
         'lang',
         'is_analyzed',
+        'source',
+        'img',
+        'html_encoded',
+        'fact_check_url'
     ];
 
     protected $casts = ['date'=>'date', 'created_at'=>'datetime', 'updated_at'=>'datetime'];

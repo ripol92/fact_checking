@@ -10,6 +10,7 @@ class RssFeedResourceSeeder extends Seeder
     CONST MIXED_LANGUAGE_ID = 4;
 
     CONST FEEDBURNER_RSS_FEED_TYPE_ID = 1;
+    CONST SIMPLE_RSS_FEED_TYPE_ID = 2;
     /**
      * Run the database seeds.
      *
@@ -273,6 +274,22 @@ class RssFeedResourceSeeder extends Seeder
                 'order' => 32,
                 'language_id' => self::RUSSIAN_LANGUAGE_ID,
                 'rss_feed_type_id' => self::FEEDBURNER_RSS_FEED_TYPE_ID
+            ],
+            [
+                'name' => 'factcheck',
+                'display_name' => 'FactCheckTj',
+                'link' => 'http://factcheck.tj/ru/feed',
+                'order' => 33,
+                'language_id' => self::RUSSIAN_LANGUAGE_ID,
+                'rss_feed_type_id' => self::SIMPLE_RSS_FEED_TYPE_ID
+            ],
+            [
+                'name' => 'factcheck',
+                'display_name' => 'FactCheckTj',
+                'link' => 'http://factcheck.tj/feed',
+                'order' => 34,
+                'language_id' => self::TAJIK_LANGUAGE_ID,
+                'rss_feed_type_id' => self::SIMPLE_RSS_FEED_TYPE_ID
             ]
 
         ];

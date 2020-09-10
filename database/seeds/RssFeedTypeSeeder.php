@@ -11,7 +11,7 @@ class RssFeedTypeSeeder extends Seeder
      */
     public function run()
     {
-        $data = ['name' => 'feeds.feedburner.com'];
+        $data = [['name' => 'feeds.feedburner.com'], ['name' => 'simple_rss']];
 
         \App\Models\RssFeedType::insert($data);
     }

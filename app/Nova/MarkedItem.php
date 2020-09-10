@@ -31,7 +31,7 @@ class MarkedItem extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = "id";
 
     /**
      * The columns that should be searched.
@@ -39,7 +39,7 @@ class MarkedItem extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title', 'description'
+        "id", "title", "description"
     ];
 
     public static $with = [
@@ -57,23 +57,31 @@ class MarkedItem extends Resource
         return [
             ID::make()->sortable(),
 
-            Text::make('Title')->sortable()->hideFromIndex(),
+            Text::make("Title")->sortable()->hideFromIndex(),
 
-            Text::make('Description')->sortable()->hideFromIndex(),
+            Text::make("Description")->sortable()->hideFromIndex(),
 
-            Text::make('Link')->sortable(),
+            Text::make("Image")->sortable()->hideFromIndex(),
 
-            Text::make('Language', 'lang')->sortable(),
+            Text::make("Source")->sortable()->hideFromIndex(),
 
-            Date::make('Date')->sortable(),
+            Text::make("Html Encoded")->sortable()->hideFromIndex(),
 
-            Boolean::make('Is Analyzed')->sortable(),
+            Text::make("FactCheck Url", "fact_check_url")->sortable()->hideFromIndex(),
 
-            HasOne::make('Analysed Result', 'analyzedResult', AnalysedUrl::class),
+            Text::make("Link")->sortable(),
 
-            HasMany::make('Favorites', 'users', User::class),
+            Text::make("Language", "lang")->sortable(),
 
-            HasMany::make('Analyses', 'analyzedUsers', User::class),
+            Date::make("Date")->sortable(),
+
+            Boolean::make("Is Analyzed")->sortable(),
+
+            HasOne::make("Analysed Result", "analyzedResult", AnalysedUrl::class),
+
+            HasMany::make("Favorites", "users", User::class),
+
+            HasMany::make("Analyses", "analyzedUsers", User::class),
 
             Boolean::make("For Analyze", function () {
                 return count($this->analyzedUsers) > 0;
