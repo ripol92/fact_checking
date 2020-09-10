@@ -3,6 +3,8 @@
 namespace App\Nova;
 
 use App\Nova\Actions\AnalyzeUrls;
+use App\Nova\Filters\UsersMarkedItems;
+use App\Nova\Filters\UsersMarkedItemsForAnalyze;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Laravel\Nova\Fields\Boolean;
@@ -125,7 +127,10 @@ class MarkedItem extends Resource
      */
     public function filters(Request $request)
     {
-        return [];
+        return [
+            new UsersMarkedItems("user_marked_item", "Marked Items"),
+            new UsersMarkedItemsForAnalyze("user_analyzed_item", "For Analyze"),
+        ];
     }
 
     /**

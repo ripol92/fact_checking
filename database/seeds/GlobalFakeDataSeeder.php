@@ -15,7 +15,7 @@ class GlobalFakeDataSeeder extends Seeder
      */
     public function run()
     {
-        $amountOfUsers = 10;
+        $amountOfUsers = 50;
         factory(User::class, $amountOfUsers)->create()->each(function (User $user) {
 
             factory(MarkedItem::class, 3)->create()->each(function (MarkedItem $markedItem) use ($user) {

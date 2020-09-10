@@ -15,7 +15,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  * Class User
  * @package App
  * @property int $id
- * @property string name
+ * @property string $name
  * @property string $email
  * @property boolean $is_admin
  * @property string $password
