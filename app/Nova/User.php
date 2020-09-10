@@ -2,12 +2,27 @@
 
 namespace App\Nova;
 
+use App\Models\MarkedItem;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 
+/**
+ * Class User
+ * @package App\Nova
+ * @property int $id
+ * @property string name
+ * @property string $email
+ * @property boolean $is_admin
+ * @property string $password
+ * @property Carbon|string $updated_at
+ * @property Carbon|string $created_at
+ * @property string|null $firebase_token
+ * @property MarkedItem[] $markedNews
+ */
 class User extends Resource
 {
     /**

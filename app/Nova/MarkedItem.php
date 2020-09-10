@@ -2,9 +2,9 @@
 
 namespace App\Nova;
 
-use App\Models\UserMarkedItem;
 use App\Nova\Actions\AnalyzeUrls;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\DateTime;
@@ -12,10 +12,24 @@ use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 /**
- * @property \App\User[] analyzedUsers
+ * @property int $id
+ * @property string $link
+ * @property string $lang
+ * @property string $description
+ * @property string $title
+ * @property Carbon|string $date
+ * @property boolean $is_analyzed
+ * @property Carbon|string $updated_at
+ * @property Carbon|string $created_at
+ * @property string|mixed $html_encoded
+ * @property string|null $source
+ * @property string $img
+ * @property string|null $fact_check_url
+ * @property \App\User[]|null $users
+ * @property \App\User[]|null $analyzedUsers
+ * @property \App\Models\AnalysedUrl|null $analyzedResult
  */
 class MarkedItem extends Resource
 {
@@ -90,10 +104,6 @@ class MarkedItem extends Resource
             DateTime::make("Created At")
                 ->sortable()
                 ->exceptOnForms(),
-
-            DateTime::make("Updated At")
-                ->sortable()
-                ->exceptOnForms()->hideFromIndex()
         ];
     }
 

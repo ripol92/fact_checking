@@ -5,7 +5,6 @@ namespace App;
 use App\Models\MarkedItem;
 use App\Models\UserMarkedItem;
 use Carbon\Carbon;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Notifications\Notification;
@@ -15,14 +14,15 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 /**
  * Class User
  * @package App
- * @property string $id
+ * @property int $id
  * @property string name
  * @property string $email
  * @property boolean $is_admin
  * @property string $password
- * @property Carbon $updated_at
- * @property Carbon $created_at
+ * @property Carbon|string $updated_at
+ * @property Carbon|string $created_at
  * @property string|null $firebase_token
+ * @property MarkedItem[] $markedNews
  */
 class User extends Authenticatable implements JWTSubject
 {
@@ -76,16 +76,26 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function userMarkedItem()
     {
         return $this->hasMany(UserMarkedItem::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function markedNews()
     {
         return $this->belongsToMany(MarkedItem::class, 'user_marked_item');
     }
 
+    /**
+     * @param Notification $notification
+     * @return string|null
+     */
     public function routeNotificationForFirebase(Notification $notification)
     {
         return $this->firebase_token;

@@ -8,12 +8,13 @@ use Illuminate\Support\Carbon;
 /**
  * Class ImageCheck
  * @package App\Models
+ * @property int $id
  * @property string $identifier
  * @property string $image_path
  * @property string $message
  * @property string $results_path
- * @property Carbon $updated_at
- * @property Carbon $created_at
+ * @property string|Carbon $updated_at
+ * @property string|Carbon $created_at
  */
 class ImageCheck extends Model
 {
