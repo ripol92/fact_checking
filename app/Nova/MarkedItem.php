@@ -102,8 +102,7 @@ class MarkedItem extends Resource
             }),
 
             DateTime::make("Created At")
-                ->sortable()
-                ->exceptOnForms(),
+                ->hideFromIndex()
         ];
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\RssFeedType;
 use Illuminate\Database\Seeder;
 
 class RssFeedTypeSeeder extends Seeder
@@ -13,6 +14,6 @@ class RssFeedTypeSeeder extends Seeder
     {
         $data = [['name' => 'feeds.feedburner.com'], ['name' => 'simple_rss']];
 
-        \App\Models\RssFeedType::insert($data);
+        RssFeedType::insert($data);
     }
 }

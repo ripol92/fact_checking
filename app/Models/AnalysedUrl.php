@@ -34,6 +34,7 @@ class AnalysedUrl extends Model
 
     protected $casts = [
         "image_links" => "array",
+        "text_ru" => "json",
         "adjectives_analyse" => "json",
         "updated_at" => "datetime",
         "created_at" => "datetime"

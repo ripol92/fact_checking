@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Language;
 use Illuminate\Database\Seeder;
 
 class LanguageSeeder extends Seeder
@@ -34,6 +35,6 @@ class LanguageSeeder extends Seeder
             ]
         ];
 
-        \App\Models\Language::insert($data);
+        Language::insert($data);
     }
 }
