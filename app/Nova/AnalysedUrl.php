@@ -41,6 +41,11 @@ class AnalysedUrl extends Resource
     public static $title = 'url';
 
     /**
+     * @var string
+     */
+    public static $defaultSortField = "created_at";
+
+    /**
      * The columns that should be searched.
      *
      * @var array

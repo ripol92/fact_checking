@@ -2,15 +2,15 @@
 
 namespace App\Nova\Actions;
 
-use App\FactChecking\Services\SendUrlToParser;
 use App\Models\MarkedItem;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
+use Laravel\Nova\Fields\Text;
 
-class AnalyzeUrls extends Action
+class SetMarkedItemFactCheckUrl extends Action
 {
     use InteractsWithQueue, Queueable;
 
@@ -19,20 +19,13 @@ class AnalyzeUrls extends Action
      *
      * @param \Laravel\Nova\Fields\ActionFields $fields
      * @param \Illuminate\Support\Collection $models
-     * @throws \Exception
      */
     public function handle(ActionFields $fields, Collection $models)
     {
-        $urlToParserSender = new SendUrlToParser();
+        $url = $fields->get("url");
         foreach ($models as $model) {
-            /** @var MarkedItem $model */
-            if (!filter_var($model->link, FILTER_VALIDATE_URL)) {
-                continue;
-            }
-            $url = $model->link;
-
-            $urlToParserSender->send($url, $model->lang);
-            $model->is_analyzed = true;
+            /**@var MarkedItem $model */
+            $model->fact_check_url = $url;
             $model->save();
         }
     }
@@ -44,6 +37,9 @@ class AnalyzeUrls extends Action
      */
     public function fields()
     {
-        return [];
+        return [
+            Text::make("Fact Check Result Url", "url")
+                ->rules("required", "max:255", "url")
+        ];
     }
 }

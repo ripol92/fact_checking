@@ -7,7 +7,7 @@ use Laravel\Nova\Resource as NovaResource;
 
 abstract class Resource extends NovaResource
 {
-    public static $defaultSortField = "created_at";
+    public static $defaultSortField = "id";
     public static $defaultSortDir = "desc";
 
     /**

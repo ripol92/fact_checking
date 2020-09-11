@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\Nova\Actions\AnalyzeUrls;
+use App\Nova\Actions\SetMarkedItemFactCheckUrl;
 use App\Nova\Filters\UsersMarkedItems;
 use App\Nova\Filters\UsersMarkedItemsForAnalyze;
 use Illuminate\Http\Request;
@@ -155,7 +156,10 @@ class MarkedItem extends Resource
         return [
             (new AnalyzeUrls())->canRun(function () {
                 return true;
-            })
+            }),
+            (new SetMarkedItemFactCheckUrl())->canRun(function () {
+                return true;
+            }),
         ];
     }
 }
