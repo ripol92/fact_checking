@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             LanguageSeeder::class,
             RssFeedTypeSeeder::class,
             RssFeedResourceSeeder::class,
+            GlobalFakeDataSeeder::class,
         ]);
     }
 }

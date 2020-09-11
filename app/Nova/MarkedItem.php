@@ -2,9 +2,11 @@
 
 namespace App\Nova;
 
-use App\Models\UserMarkedItem;
 use App\Nova\Actions\AnalyzeUrls;
+use App\Nova\Filters\UsersMarkedItems;
+use App\Nova\Filters\UsersMarkedItemsForAnalyze;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Date;
 use Laravel\Nova\Fields\DateTime;
@@ -12,10 +14,24 @@ use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 
 /**
- * @property \App\User[] analyzedUsers
+ * @property int $id
+ * @property string $link
+ * @property string $lang
+ * @property string $description
+ * @property string $title
+ * @property Carbon|string $date
+ * @property boolean $is_analyzed
+ * @property Carbon|string $updated_at
+ * @property Carbon|string $created_at
+ * @property string|mixed $html_encoded
+ * @property string|null $source
+ * @property string $img
+ * @property string|null $fact_check_url
+ * @property \App\User[]|null $users
+ * @property \App\User[]|null $analyzedUsers
+ * @property \App\Models\AnalysedUrl|null $analyzedResult
  */
 class MarkedItem extends Resource
 {
@@ -31,7 +47,7 @@ class MarkedItem extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = "id";
 
     /**
      * The columns that should be searched.
@@ -39,7 +55,7 @@ class MarkedItem extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'title', 'description'
+        "id", "title", "description"
     ];
 
     public static $with = [
@@ -57,35 +73,38 @@ class MarkedItem extends Resource
         return [
             ID::make()->sortable(),
 
-            Text::make('Title')->sortable()->hideFromIndex(),
+            Text::make("Title")->sortable()->hideFromIndex(),
 
-            Text::make('Description')->sortable()->hideFromIndex(),
+            Text::make("Description")->sortable()->hideFromIndex(),
 
-            Text::make('Link')->sortable(),
+            Text::make("Image")->sortable()->hideFromIndex(),
 
-            Text::make('Language', 'lang')->sortable(),
+            Text::make("Source")->sortable()->hideFromIndex(),
 
-            Date::make('Date')->sortable(),
+            Text::make("Html Encoded")->sortable()->hideFromIndex(),
 
-            Boolean::make('Is Analyzed')->sortable(),
+            Text::make("FactCheck Url", "fact_check_url")->sortable()->hideFromIndex(),
 
-            HasOne::make('Analysed Result', 'analyzedResult', AnalysedUrl::class),
+            Text::make("Link")->sortable(),
 
-            HasMany::make('Favorites', 'users', User::class),
+            Text::make("Language", "lang")->sortable(),
 
-            HasMany::make('Analyses', 'analyzedUsers', User::class),
+            Date::make("Date")->sortable(),
+
+            Boolean::make("Is Analyzed")->sortable(),
+
+            HasOne::make("Analysed Result", "analyzedResult", AnalysedUrl::class),
+
+            HasMany::make("Favorites", "users", User::class),
+
+            HasMany::make("Analyses", "analyzedUsers", User::class),
 
             Boolean::make("For Analyze", function () {
                 return count($this->analyzedUsers) > 0;
             }),
 
             DateTime::make("Created At")
-                ->sortable()
-                ->exceptOnForms(),
-
-            DateTime::make("Updated At")
-                ->sortable()
-                ->exceptOnForms()->hideFromIndex()
+                ->hideFromIndex()
         ];
     }
 
@@ -108,7 +127,10 @@ class MarkedItem extends Resource
      */
     public function filters(Request $request)
     {
-        return [];
+        return [
+            new UsersMarkedItems("user_marked_item", "Marked Items"),
+            new UsersMarkedItemsForAnalyze("user_analyzed_item", "For Analyze"),
+        ];
     }
 
     /**

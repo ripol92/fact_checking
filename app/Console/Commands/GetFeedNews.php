@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use App\Jobs\GetFeedNewsJob;
 use Illuminate\Console\Command;
 
-class CacheFeedNews extends Command
+class GetFeedNews extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'feed_news:cache';
+    protected $signature = 'news:get';
 
     /**
      * The console command description.

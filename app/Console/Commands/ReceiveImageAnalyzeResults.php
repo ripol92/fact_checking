@@ -40,6 +40,7 @@ class ReceiveImageAnalyzeResults extends Command
      */
     public function handle()
     {
+        ini_set("default_socket_timeout", -1);
         Redis::connection("cli")->subscribe(config("services.fake_img_detector.receive_chan"), function ($message) {
             $resp = json_decode($message, true);
             $identifier = $resp["identifier"];

@@ -2,12 +2,27 @@
 
 namespace App\Nova;
 
+use App\Models\MarkedItem;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 
+/**
+ * Class User
+ * @package App\Nova
+ * @property int $id
+ * @property string name
+ * @property string $email
+ * @property boolean $is_admin
+ * @property string $password
+ * @property Carbon|string $updated_at
+ * @property Carbon|string $created_at
+ * @property string|null $firebase_token
+ * @property MarkedItem[] $markedNews
+ */
 class User extends Resource
 {
     /**
@@ -64,6 +79,27 @@ class User extends Resource
                 ->rules("nullable", "string", "max:255")
                 ->creationRules('unique:users,firebase_token')
                 ->updateRules('unique:users,firebase_token,{{resourceId}}'),
+
+            Text::make("Phone Number", "phone_number")
+                ->hideFromIndex()
+                ->sortable()
+                ->rules("nullable", "string", "regex:/\+?[0-9]{7,9}/")
+                ->creationRules('unique:users,phone_number')
+                ->updateRules('unique:users,phone_number,{{resourceId}}'),
+
+            Text::make("Facebook link", "facebook_link")
+                ->hideFromIndex()
+                ->sortable()
+                ->rules("nullable", "string", "max:255")
+                ->creationRules('unique:users,facebook_link')
+                ->updateRules('unique:users,facebook_link,{{resourceId}}'),
+
+            Text::make("Telegram Account", "telegram_account")
+                ->hideFromIndex()
+                ->sortable()
+                ->rules("nullable", "string")
+                ->creationRules('unique:users,telegram_account')
+                ->updateRules('unique:users,telegram_account,{{resourceId}}'),
 
             Password::make('Password')
                 ->onlyOnForms()

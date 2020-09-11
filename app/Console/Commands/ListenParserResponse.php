@@ -45,7 +45,8 @@ class ListenParserResponse extends Command
      */
     public function handle()
     {
-        Redis::subscribe(['parsed_urls'], function ($message) {
+        ini_set("default_socket_timeout", -1);
+        Redis::connection("cli")->subscribe(['parsed_urls'], function ($message) {
             $data = json_decode($message);
             $url = $data->url;
             $article = $data->article;

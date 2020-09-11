@@ -5,13 +5,27 @@ namespace App\Nova;
 use App\FactChecking\Helpers\JSONToHtmlTable;
 use App\Nova\Actions\AddAndAnalyseUrl;
 use App\Nova\Actions\AnalyzeUrls;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Code;
+use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
 
+/**
+ * @property string $id
+ * @property string $url
+ * @property string $article
+ * @property string|mixed $text_ru json
+ * @property string[] $image_links
+ * @property string $lng
+ * @property string|mixed $adjectives_analyse json
+ * @property string|Carbon $created_at
+ * @property string|Carbon $updated_at
+ **/
 class AnalysedUrl extends Resource
 {
     /**
@@ -34,7 +48,16 @@ class AnalysedUrl extends Resource
      * @var array
      */
     public static $search = [
-        'url'
+        'id', 'url', 'article'
+    ];
+
+    /**
+     * The relationships that should be eager loaded when performing an index query.
+     *
+     * @var array
+     */
+    public static $with = [
+        "imageChecks",
     ];
 
     /**
@@ -48,13 +71,13 @@ class AnalysedUrl extends Resource
         return [
             ID::make("id")->exceptOnForms()->hideFromIndex(),
 
-            Text::make("Url", function (\App\Models\AnalysedUrl $model) {
-                $url = $model->url;
+            Text::make("Url", function () {
+                $url = $this->url;
                 return "<a href=\"$url\" target=\"_blank\">$url</a>";
             })->asHtml(),
 
-            Text::make("Article", function (\App\Models\AnalysedUrl $model) {
-                $article = $model->article;
+            Text::make("Article", function () {
+                $article = $this->article;
                 return strlen($article) > 80 ?
                     mb_substr($article, 0, 80) . "..."
                     : $article;
@@ -86,6 +109,8 @@ class AnalysedUrl extends Resource
             })->exceptOnForms(),
 
             HasMany::make("Image Check", "imageChecks", ImageCheck::class),
+
+            DateTime::make("Created At", "created_at")->onlyOnDetail(),
         ];
     }
 

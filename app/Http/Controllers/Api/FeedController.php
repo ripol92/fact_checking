@@ -6,65 +6,51 @@ use App\Http\Controllers\Controller;
 use App\Models\MarkedItem;
 use App\Models\UserAnalyzedItem;
 use App\Models\UserMarkedItem;
-use App\Services\RssFeedService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class FeedController extends Controller
 {
-    CONST FACT_CHECK_TJ = [
-        'ru' => ['factcheck.tj/ru/feed'],
-        'tg' => ['factcheck.tj/feed']
-    ];
+    CONST FACT_CHECK_SOURCE_NAME = 'FactCheckTj';
+
 
     /**
      * @param Request $request
-     * @return array
+     * @return \Illuminate\Contracts\Pagination\Paginator
      * @throws \Illuminate\Validation\ValidationException
      */
     public function getNews(Request $request)
     {
         $this->validate($request, [
             "lang" => "string|nullable",
-            "limit" => "integer|nullable",
+            "per_page" => "integer|nullable",
         ]);
 
         $language =  $request->get("lang") ? $request->get("lang") : "ru";
-        $name = $language."-news";
+        $perPage =  $request->get("per_page") ? $request->get("per_page") : 50;
 
-        $allRssFeedNews = Cache::get($name, function () use ($language) {
-            return RssFeedService::allRssFeedNews($language);
-        });
-
-        $limit = $request->get("limit") ? $request->get("limit") : 100;
-
-        $news = [];
-
-        for($i=0; $i<=$limit; $i++) {
-           array_push($news, $allRssFeedNews[$i]);
-        }
+        $news = DB::table('marked_items')->where('source', '!=',self::FACT_CHECK_SOURCE_NAME)
+            ->where('lang', $language)->orderBy('date','desc')
+            ->simplePaginate($perPage);
 
         return $news;
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\Pagination\Paginator
+     */
     public function getFactCheckTjNews(Request $request)
     {
-        $this->validate($request, [
-            "lang" => "string|nullable"
-        ]);
-
         $language =  $request->get("lang") ? $request->get("lang") : "ru";
-        $name = "factcheck-".$language."-news";
+        $perPage =  $request->get("per_page") ? $request->get("per_page") : 40;
 
-        $source = self::FACT_CHECK_TJ[$language];
+        $news = DB::table('marked_items')->where('source', self::FACT_CHECK_SOURCE_NAME)
+            ->where('lang', $language)->orderBy('date','desc')
+            ->simplePaginate($perPage);
 
-        $feedNews = Cache::get($name, function () use ($language, $source) {
-            return RssFeedService::allRssFeedNews($language, $source);
-        });
-
-        return $feedNews;
+        return $news;
     }
 
 
