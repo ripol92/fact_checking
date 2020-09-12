@@ -137,7 +137,9 @@ class ImageCheck extends Resource
     public function actions(Request $request)
     {
         return [
-            (new AnalyzeImage()),
+            (new AnalyzeImage())->canRun(function () {
+                return true;
+            })->withoutActionEvents(),
         ];
     }
 }

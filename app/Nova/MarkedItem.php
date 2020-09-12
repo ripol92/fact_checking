@@ -3,6 +3,8 @@
 namespace App\Nova;
 
 use App\Nova\Actions\AnalyzeUrls;
+use App\Nova\Actions\SendFirebaseNotifications;
+use App\Nova\Actions\SetMarkedItemFactCheckUrl;
 use App\Nova\Filters\UsersMarkedItems;
 use App\Nova\Filters\UsersMarkedItemsForAnalyze;
 use Illuminate\Http\Request;
@@ -13,6 +15,7 @@ use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\HasOne;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Stack;
 use Laravel\Nova\Fields\Text;
 
 /**
@@ -32,6 +35,7 @@ use Laravel\Nova\Fields\Text;
  * @property \App\User[]|null $users
  * @property \App\User[]|null $analyzedUsers
  * @property \App\Models\AnalysedUrl|null $analyzedResult
+ * @property bool $notification_send
  */
 class MarkedItem extends Resource
 {
@@ -73,25 +77,34 @@ class MarkedItem extends Resource
         return [
             ID::make()->sortable(),
 
-            Text::make("Title")->sortable()->hideFromIndex(),
+            Text::make("Title")->hideFromIndex(),
 
-            Text::make("Description")->sortable()->hideFromIndex(),
+            Text::make("Description")->hideFromIndex(),
 
-            Text::make("Image")->sortable()->hideFromIndex(),
+            Text::make("Image")->hideFromIndex(),
 
-            Text::make("Source")->sortable()->hideFromIndex(),
+            Text::make("Source")->hideFromIndex(),
 
-            Text::make("Html Encoded")->sortable()->hideFromIndex(),
+            Text::make("Html Encoded")->hideFromIndex(),
 
-            Text::make("FactCheck Url", "fact_check_url")->sortable()->hideFromIndex(),
+            Text::make("FactCheck Url", "fact_check_url")->hideFromIndex(),
 
-            Text::make("Link")->sortable(),
+            Stack::make("Title", [
+                Text::make("Title", function () {
+                    return "<div style='width: 600px; text-overflow:ellipsis; overflow:hidden; white-space:nowrap'>{$this->title}</div>";
+                })->asHtml(),
+                Text::make("Link", function () {
+                    return "<a href='{$this->link}' target='_blank'>Full Url</a>";
+                })->asHtml(),
+            ])->hideFromDetail(),
 
-            Text::make("Language", "lang")->sortable(),
+            Text::make("Link")->onlyOnDetail(),
+
+            Text::make("Language", "lang")->onlyOnDetail(),
 
             Date::make("Date")->sortable(),
 
-            Boolean::make("Is Analyzed")->sortable(),
+            Boolean::make("Is Analyzed"),
 
             HasOne::make("Analysed Result", "analyzedResult", AnalysedUrl::class),
 
@@ -102,6 +115,8 @@ class MarkedItem extends Resource
             Boolean::make("For Analyze", function () {
                 return count($this->analyzedUsers) > 0;
             }),
+
+            Boolean::make("Notification Send"),
 
             DateTime::make("Created At")
                 ->hideFromIndex()
@@ -155,7 +170,13 @@ class MarkedItem extends Resource
         return [
             (new AnalyzeUrls())->canRun(function () {
                 return true;
-            })
+            })->withoutActionEvents(),
+            (new SetMarkedItemFactCheckUrl())->canRun(function () {
+                return true;
+            })->withoutActionEvents(),
+            (new SendFirebaseNotifications())->canRun(function () {
+                return true;
+            })->withoutActionEvents()
         ];
     }
 }

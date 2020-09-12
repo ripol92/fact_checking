@@ -37,3 +37,13 @@ Route::group($newsGroup, function () {
     Route::post("/add-to-analyzed", "FeedController@analyzeItem");
     Route::get("/analyzed", "FeedController@getUserAnalyzedNews");
 });
+
+$notificationsGroup = [
+    "middleware" => ["auth:api"],
+    "namespace" => "Api",
+    "prefix" => "/notifications"
+];
+
+Route::group($notificationsGroup, function () {
+    Route::get("/all", "NotificationsController@all");
+});

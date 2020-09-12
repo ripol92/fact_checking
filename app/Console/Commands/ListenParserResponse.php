@@ -78,15 +78,13 @@ class ListenParserResponse extends Command
                 $imagePaths[] = $imageName;
             }
             $uuid = Uuid::uuid1()->toString();
-            AnalysedUrl::query()->create(
-                [
-                    "id" => $uuid,
-                    "url" => $url,
-                    "article" => $article,
-                    "image_links" => $imagePaths,
-                    "lng" => $lng
-                ]
-            );
+            $analysedUrl = new AnalysedUrl();
+            $analysedUrl->id = $uuid;
+            $analysedUrl->url = $url;
+            $analysedUrl->article = $article;
+            $analysedUrl->image_links = $imagePaths;
+            $analysedUrl->lng = $lng;
+            $analysedUrl->save();
 
             /** @var AnalysedUrl $analysedUrl */
             $this->makeBlackMagicRequest($uuid);

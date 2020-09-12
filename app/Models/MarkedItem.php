@@ -25,6 +25,7 @@ use Illuminate\Support\Carbon;
  * @property User[]|null $users
  * @property User[]|null $analyzedUsers
  * @property AnalysedUrl|null $analyzedResult
+ * @property bool $notification_send
  */
 class MarkedItem extends Model
 {
@@ -39,6 +40,7 @@ class MarkedItem extends Model
         "source",
         "img",
         "fact_check_url",
+        "notification_send"
     ];
 
     protected $casts = [

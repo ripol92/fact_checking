@@ -8,7 +8,6 @@ use App\Nova\Actions\AnalyzeUrls;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
@@ -41,6 +40,11 @@ class AnalysedUrl extends Resource
      * @var string
      */
     public static $title = 'url';
+
+    /**
+     * @var string
+     */
+    public static $defaultSortField = "created_at";
 
     /**
      * The columns that should be searched.
@@ -156,8 +160,12 @@ class AnalysedUrl extends Resource
     public function actions(Request $request)
     {
         return [
-            (new AnalyzeUrls()),
-            (new AddAndAnalyseUrl())
+            (new AnalyzeUrls())->canRun(function () {
+                return true;
+            })->withoutActionEvents(),
+            (new AddAndAnalyseUrl())->canRun(function () {
+                return true;
+            })->withoutActionEvents(),
         ];
     }
 }

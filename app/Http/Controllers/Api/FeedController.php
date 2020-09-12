@@ -6,13 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\MarkedItem;
 use App\Models\UserAnalyzedItem;
 use App\Models\UserMarkedItem;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class FeedController extends Controller
 {
-    CONST FACT_CHECK_SOURCE_NAME = 'FactCheckTj';
+    const FACT_CHECK_SOURCE_NAME = 'FactCheckTj';
 
 
     /**
@@ -27,11 +28,11 @@ class FeedController extends Controller
             "per_page" => "integer|nullable",
         ]);
 
-        $language =  $request->get("lang") ? $request->get("lang") : "ru";
-        $perPage =  $request->get("per_page") ? $request->get("per_page") : 50;
+        $language = $request->get("lang") ? $request->get("lang") : "ru";
+        $perPage = $request->get("per_page") ? $request->get("per_page") : 50;
 
-        $news = DB::table('marked_items')->where('source', '!=',self::FACT_CHECK_SOURCE_NAME)
-            ->where('lang', $language)->orderBy('date','desc')
+        $news = DB::table('marked_items')->where('source', '!=', self::FACT_CHECK_SOURCE_NAME)
+            ->where('lang', $language)->orderBy('date', 'desc')
             ->simplePaginate($perPage);
 
         return $news;
@@ -43,11 +44,11 @@ class FeedController extends Controller
      */
     public function getFactCheckTjNews(Request $request)
     {
-        $language =  $request->get("lang") ? $request->get("lang") : "ru";
-        $perPage =  $request->get("per_page") ? $request->get("per_page") : 40;
+        $language = $request->get("lang") ? $request->get("lang") : "ru";
+        $perPage = $request->get("per_page") ? $request->get("per_page") : 40;
 
         $news = DB::table('marked_items')->where('source', self::FACT_CHECK_SOURCE_NAME)
-            ->where('lang', $language)->orderBy('date','desc')
+            ->where('lang', $language)->orderBy('date', 'desc')
             ->simplePaginate($perPage);
 
         return $news;
@@ -78,14 +79,14 @@ class FeedController extends Controller
 
         if ($item) {
             $userMarkedItemExist = UserMarkedItem::where('user_id', $user->id)->where('marked_item_id', $item->id)->exists();
-            if($userMarkedItemExist) {
+            if ($userMarkedItemExist) {
                 return response()->json([
                     'msg' => 'Like is already Exist',
-                ], 409 );
+                ], 409);
             }
         }
 
-        $markedItem = DB::transaction(function() use ($user, $requestData, $item) {
+        DB::transaction(function () use ($user, $requestData, $item) {
             $markedItem = $item ? $item : new MarkedItem($requestData);
             $markedItem->save();
 
@@ -97,10 +98,7 @@ class FeedController extends Controller
             return $markedItem;
         });
 
-        return response()->json([
-                'item' => $markedItem->withCount('userMarkedItem')->get(),
-                'msg' => 'Stored Successful'
-            ], 200);
+        return response()->json(['msg' => 'Stored Successfully'], 200);
     }
 
 
@@ -127,9 +125,7 @@ class FeedController extends Controller
 
         UserMarkedItem::where('marked_item_id', $markedItem->id)->where('user_id', $user->id)->delete();
 
-        return response()->json([
-            'msg' => 'Item deleted successful'
-        ], 200);
+        return response()->json(['msg' => 'Item deleted successful'], 200);
     }
 
     /**
@@ -162,27 +158,25 @@ class FeedController extends Controller
         ]);
 
         $requestData = $request->all();
-        $requestData['date'] = Carbon::parse($request->date)->format('Y-m-d');
+        $requestData['date'] = Carbon::parse($request->get("date"))->format('Y-m-d');
 
         $user = $request->user();
 
-        $item = MarkedItem::where('link', $request->link)->first();
-
+        $item = MarkedItem::where('link', $request->get("link"))->first();
         if ($item) {
-//            if($item->is_analyzed == true) {
-//                return response()->json([
-//                    'msg' => 'Item is already Analyzed',
-//                ], 408 );
-//            }
-            $userMarkedItemExist = UserAnalyzedItem::where('user_id', 1)->where('marked_item_id', $item->id)->exists();
-            if($userMarkedItemExist) {
+            /**@var User $user */
+            $user = $request->user();
+            $userMarkedItemExist = UserAnalyzedItem::where('user_id', $user->id)
+                ->where('marked_item_id', $item->id)
+                ->exists();
+            if ($userMarkedItemExist) {
                 return response()->json([
                     'msg' => 'Record is already Exist',
-                ], 409 );
+                ], 409);
             }
         }
 
-        $markedItem = DB::transaction(function() use ($user, $requestData, $item) {
+        DB::transaction(function () use ($user, $requestData, $item) {
             $markedItem = $item ? $item : new MarkedItem($requestData);
             $markedItem->save();
 
@@ -194,10 +188,7 @@ class FeedController extends Controller
             return $markedItem;
         });
 
-        return response()->json([
-            'item' => $markedItem->withCount('userAnalyzedItem')->get(),
-            'msg' => 'Stored Successful'
-        ], 200);
+        return response()->json(['msg' => 'Stored Successfully'], 200);
     }
 
     /**
@@ -213,5 +204,4 @@ class FeedController extends Controller
 
         return $analyzedItems;
     }
-
 }
