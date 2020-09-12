@@ -2,11 +2,12 @@
 
 namespace App\Nova;
 
+use App\FactChecking\Helpers\JSONToHtmlTable;
 use App\Nova\Actions\AddAndAnalyseUrl;
 use App\Nova\Actions\AnalyzeUrls;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\ID;
@@ -86,14 +87,28 @@ class AnalysedUrl extends Resource
                     : $article;
             })->exceptOnForms(),
 
-            Code::make("Text Ru (plagiat urls)", "text_ru")
-                ->json(),
+            Text::make("Text Ru (plagiat urls)", function (\App\Models\AnalysedUrl $model) {
+                $textRuResponse = $model->text_ru;
+                try {
+                    $htmlTable = (new JSONToHtmlTable())->jsonToTable(json_decode($textRuResponse));
+                } catch (Exception $e) {
+                    $htmlTable = $model->text_ru;
+                }
+                return $htmlTable;
+            })->onlyOnDetail()->asHtml(),
 
-            Code::make("Adjectives analyse", "adjectives_analyse")
-                ->exceptOnForms()->hideFromIndex()->json(),
+            Text::make("Adjectives analyse", function (\App\Models\AnalysedUrl $model) {
+                $adjectivesAnalyse = $model->adjectives_analyse;
+                try {
+                    $htmlTable = (new JSONToHtmlTable())->jsonToTable($adjectivesAnalyse);
+                } catch (Exception $exception) {
+                    $htmlTable = $model->adjectives_analyse;
+                }
+                return $htmlTable;
+            })->onlyOnDetail()->asHtml(),
 
-            Image::make("Images", function () {
-                $imageLinks = $this->image_links;
+            Image::make("Images", function (\App\Models\AnalysedUrl $model) {
+                $imageLinks = $model->image_links;
                 return last($imageLinks);
             })->exceptOnForms(),
 
