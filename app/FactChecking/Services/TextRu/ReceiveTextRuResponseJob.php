@@ -63,9 +63,6 @@ class ReceiveTextRuResponseJob implements ShouldQueue
         $resCheck = json_decode($respBody, true);
         DB::table(self::ANALYSED_URLS_TABLE_NAME)
             ->where('id', $this->analysedUrlId)
-            ->update([
-                    'text_ru' => $resCheck["result_json"],
-                    'text_ru_response_received' => true]
-            );
+            ->update(['text_ru' => $resCheck["result_json"]]);
     }
 }

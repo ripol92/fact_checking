@@ -87,8 +87,7 @@ class AnalysedUrl extends Resource
             })->exceptOnForms(),
 
             Code::make("Text Ru (plagiat urls)", "text_ru")
-                ->language("javascript")
-                ->exceptOnForms()->hideFromIndex(),
+                ->json(),
 
             Code::make("Adjectives analyse", "adjectives_analyse")
                 ->exceptOnForms()->hideFromIndex()->json(),
@@ -146,8 +145,12 @@ class AnalysedUrl extends Resource
     public function actions(Request $request)
     {
         return [
-            (new AnalyzeUrls()),
-            (new AddAndAnalyseUrl())
+            (new AnalyzeUrls())->canRun(function () {
+                return true;
+            })->withoutActionEvents(),
+            (new AddAndAnalyseUrl())->canRun(function () {
+                return true;
+            })->withoutActionEvents(),
         ];
     }
 }

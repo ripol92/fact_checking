@@ -11,7 +11,8 @@ class TextRuController extends Controller
      * @param Request $request
      * @param $uuid
      */
-    public function runJobs(Request $request, $uuid) {
+    public function runJobs(Request $request, $uuid)
+    {
         event(new ArticleParsed($uuid));
     }
 }

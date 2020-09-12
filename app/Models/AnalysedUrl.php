@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Database\HasUUIDPrimaryKey;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -19,11 +18,10 @@ use Illuminate\Database\Eloquent\Model;
  **/
 class AnalysedUrl extends Model
 {
-    use HasUUIDPrimaryKey;
-
-    protected $keyType = 'uuid';
+    protected $keyType = 'string';
 
     protected $fillable = [
+        "id",
         "url",
         "article",
         "text_ru",

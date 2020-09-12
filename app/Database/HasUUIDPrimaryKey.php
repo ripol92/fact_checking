@@ -3,7 +3,6 @@
 
 namespace App\Database;
 
-
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 
