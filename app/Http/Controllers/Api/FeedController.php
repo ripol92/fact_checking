@@ -9,7 +9,6 @@ use App\Models\UserMarkedItem;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class FeedController extends Controller
@@ -166,7 +165,7 @@ class FeedController extends Controller
         $item = MarkedItem::where('link', $request->get("link"))->first();
         if ($item) {
             /**@var User $user */
-            $user = Auth::user();
+            $user = $request->user();
             $userMarkedItemExist = UserAnalyzedItem::where('user_id', $user->id)
                 ->where('marked_item_id', $item->id)
                 ->exists();

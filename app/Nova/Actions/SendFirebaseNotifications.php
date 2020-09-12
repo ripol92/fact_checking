@@ -79,6 +79,7 @@ class SendFirebaseNotifications extends Action
 
         $batchId = Uuid::uuid1()->toString();
         $notifications = [];
+        $now = now()->toDateTimeString();
         foreach ($users as $user) {
             $notifications[] = [
                 "title" => $title,
@@ -86,6 +87,8 @@ class SendFirebaseNotifications extends Action
                 "marked_item_id" => $markedItem->id,
                 "user_id" => $user->id,
                 "batch_id" => $batchId,
+                "created_at" => $now,
+                "updated_at" => $now,
             ];
         }
         FirebaseNotification::insert($notifications);

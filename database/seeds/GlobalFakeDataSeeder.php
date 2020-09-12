@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\AnalysedUrl;
+use App\Models\FirebaseNotification;
 use App\Models\ImageCheck;
 use App\Models\MarkedItem;
 use App\User;
@@ -25,6 +26,8 @@ class GlobalFakeDataSeeder extends Seeder
                 factory(AnalysedUrl::class, 1)->create(["url" => $markedItem->link])->each(function (AnalysedUrl $analysedUrl) {
                     factory(ImageCheck::class, 1)->create(["identifier" => $analysedUrl->id]);
                 });
+
+                factory(FirebaseNotification::class, 3)->create(["marked_item_id" => $markedItem->id, "user_id" => $user->id]);
             });
         });
     }
