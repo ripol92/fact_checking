@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -122,9 +123,9 @@ class AuthController extends Controller
         $user = $request->user();
 
         $this->validate($request, [
-            "phone_number" => ["nullable", "string", "unique:users,phone_number", "regex:/\+?[0-9]{7,9}/"],
-            "facebook_link" => ["nullable", "string", "unique:users,facebook_link", "max:254"],
-            "telegram_account" => ["nullable", "string", "unique:users,telegram_account", "max:64"],
+            "phone_number" => ["nullable", "string", Rule::unique("users", "phone_number")->ignore($user->id), "regex:/\+?[0-9]{7,9}/"],
+            "facebook_link" => ["nullable", "string", Rule::unique("users", "facebook_link")->ignore($user->id), "max:254"],
+            "telegram_account" => ["nullable", "string", Rule::unique("users", "telegram_account")->ignore($user->id), "max:64"],
         ]);
 
         $user->phone_number = $request->get("phone_number");
