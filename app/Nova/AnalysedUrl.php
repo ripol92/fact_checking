@@ -86,9 +86,9 @@ class AnalysedUrl extends Resource
             Text::make("Text Ru (plagiat urls)", function (\App\Models\AnalysedUrl $model) {
                 $textRuResponse = $model->text_ru;
                 try {
-                    $htmlTable = (new JSONToHtmlTable())->jsonToTable(json_decode($textRuResponse));
+                    $htmlTable = (new JSONToHtmlTable())->jsonToTable($textRuResponse);
                 } catch (Exception $exception) {
-                    $htmlTable = $model->text_ru;
+                    $htmlTable = $textRuResponse;
                 }
                 return $htmlTable;
             })->onlyOnDetail()->asHtml(),
@@ -98,7 +98,7 @@ class AnalysedUrl extends Resource
                 try {
                     $htmlTable = (new JSONToHtmlTable())->jsonToTable($adjectivesAnalyse);
                 } catch (Exception $exception) {
-                    $htmlTable = $model->adjectives_analyse;
+                    $htmlTable = $adjectivesAnalyse;
                 }
                 return $htmlTable;
             })->onlyOnDetail()->asHtml(),
