@@ -25,7 +25,7 @@ class CreateFirebaseNotificationsTable extends Migration
             $table->foreign("user_id")
                 ->references("id")
                 ->on("users");
-            $table->uuid("batch_id")->nullable()->unique();
+            $table->uuid("batch_id")->nullable();
             $table->timestamps();
         });
     }
