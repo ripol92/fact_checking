@@ -47,3 +47,14 @@ $notificationsGroup = [
 Route::group($notificationsGroup, function () {
     Route::get("/all", "NotificationsController@all");
 });
+
+
+$feedbackGroup = [
+    "middleware" => ["auth:api"],
+    "namespace" => "Api",
+    "prefix" => "/feedbacks"
+];
+
+Route::group($feedbackGroup, function () {
+   Route::post("/send-feedback", "FeedbackController@sendFeedback");
+});
