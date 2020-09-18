@@ -4,6 +4,7 @@
 namespace App\Jobs;
 
 
+use App\Mail\AdminEmail;
 use App\Models\Feedback;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -15,21 +16,21 @@ use Illuminate\Support\Facades\Mail;
 class SendFeedbackToAdminJob implements ShouldQueue {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private $userId;
+    /**
+     * @var Feedback
+     */
     private $feedback;
-    private $emailSent = 0;
 
     /**
      * Create a new job instance.
      *
-     * @param integer $userId
-     * @param string $feedback
+     * @param Feedback $feedback
      */
-    public function __construct(int $userId, string $feedback) {
+    public function __construct(Feedback $feedback) {
         //
-        $this->userId = $userId;
         $this->feedback = $feedback;
     }
+
 
     /**
      * Execute the job.
@@ -38,31 +39,16 @@ class SendFeedbackToAdminJob implements ShouldQueue {
      */
     public function handle() {
         // get user email, send email to admin
-        try {
-            $this->sendEmailToAdmin();
-        } catch (\Exception $exception) {
-            $this->emailSent = 0;
-        }
-        $this->saveFeedback();
+        $this->sendEmailToAdmin();
     }
 
     private function sendEmailToAdmin() {
-        $adminEmail = env("ADMIN_EMAIL");
         $feedback = $this->feedback;
 
-        Mail::send(["text" => "mail"], [], function ($message) use ($adminEmail, $feedback) {
-            $message->to($adminEmail, $feedback)
-                ->subject("Factchecking feedback");
-        });
+       Mail::to(env("ADMIN_EMAIL"))
+           ->send(new AdminEmail($feedback));
 
-        $this->emailSent = 1;
-    }
-
-    private function saveFeedback(): void {
-        $feedback = new Feedback();
-        $feedback->user_id = $this->userId;
-        $feedback->feedback = $this->feedback;
-        $feedback->email_to_admin_sent = $this->emailSent ? true : false;
-        $feedback->save();
+        $this->feedback->email_to_admin_sent = true;
+        $this->feedback->save();
     }
 }
