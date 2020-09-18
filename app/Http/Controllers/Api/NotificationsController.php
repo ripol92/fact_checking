@@ -17,7 +17,7 @@ class NotificationsController extends Controller
     public function all(Request $request)
     {
         $this->validate($request, [
-            "per_page" => "integer|nullable",
+            "per_page" => "nullable|integer|min:1|max:500",
             "sorting_dir" => "nullable|string|in:DESC,ASC"
         ]);
 
