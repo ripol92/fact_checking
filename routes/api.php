@@ -10,6 +10,7 @@ Route::group($authGroup, function () {
     Route::post("login", "AuthController@login");
     Route::get("me", "AuthController@me");
     Route::post("update_firebase_token", "AuthController@updateFirebaseToken");
+    Route::post("update_personal_info", "AuthController@updatePersonalInfo");
 });
 
 $androidAppRoutes = [
@@ -22,9 +23,9 @@ Route::group($androidAppRoutes, function () {
 });
 
 $newsGroup = [
-  "middleware" => ["auth:api"],
-  "namespace" => "Api",
-  "prefix" => "/news"
+    "middleware" => ["auth:api"],
+    "namespace" => "Api",
+    "prefix" => "/news"
 ];
 
 Route::group($newsGroup, function () {
@@ -35,4 +36,25 @@ Route::group($newsGroup, function () {
     Route::get("/favorites", "FeedController@getUserLikedNews");
     Route::post("/add-to-analyzed", "FeedController@analyzeItem");
     Route::get("/analyzed", "FeedController@getUserAnalyzedNews");
+});
+
+$notificationsGroup = [
+    "middleware" => ["auth:api"],
+    "namespace" => "Api",
+    "prefix" => "/notifications"
+];
+
+Route::group($notificationsGroup, function () {
+    Route::get("/all", "NotificationsController@all");
+});
+
+
+$feedbackGroup = [
+    "middleware" => ["auth:api"],
+    "namespace" => "Api",
+    "prefix" => "/feedbacks"
+];
+
+Route::group($feedbackGroup, function () {
+   Route::post("/send-feedback", "FeedbackController@sendFeedback");
 });

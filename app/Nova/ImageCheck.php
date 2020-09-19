@@ -4,12 +4,24 @@ namespace App\Nova;
 
 use App\Nova\Actions\AnalyzeImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
 
+/**
+ * Class ImageCheck
+ * @package App\Nova
+ * @property int $id
+ * @property string $identifier
+ * @property string $image_path
+ * @property string $message
+ * @property string $results_path
+ * @property string|Carbon $updated_at
+ * @property string|Carbon $created_at
+ */
 class ImageCheck extends Resource
 {
     /**
@@ -52,13 +64,12 @@ class ImageCheck extends Resource
                 ->exceptOnForms()
                 ->hideFromIndex(),
 
-            Boolean::make("Analyzed", function (\App\Models\ImageCheck $imgCheck) {
-                return $imgCheck->message !== null;
-            })->sortable()
-                ->exceptOnForms(),
+            Boolean::make("Analyzed", function () {
+                return !empty($this->message) || !empty($this->image_path);
+            })->exceptOnForms(),
 
-            Image::make("Input Image", function (\App\Models\ImageCheck $imgCheck) {
-                return last(explode(DIRECTORY_SEPARATOR, $imgCheck->image_path));
+            Image::make("Input Image", function () {
+                return last(explode(DIRECTORY_SEPARATOR, $this->image_path));
             })
                 ->disableDownload()
                 ->exceptOnForms(),
@@ -66,14 +77,14 @@ class ImageCheck extends Resource
             Text::make("Message", "message")
                 ->exceptOnForms(),
 
-            Image::make("Heatmap", function (\App\Models\ImageCheck $model) {
-                return last(explode(DIRECTORY_SEPARATOR, $model->results_path)) . "/heatmap.jpg";
+            Image::make("Heatmap", function () {
+                return last(explode(DIRECTORY_SEPARATOR, $this->results_path)) . "/heatmap.jpg";
             })
                 ->hideFromIndex()
                 ->disableDownload(),
 
-            Image::make("Warped", function (\App\Models\ImageCheck $model) {
-                return last(explode(DIRECTORY_SEPARATOR, $model->results_path)) . "/warped.jpg";
+            Image::make("Warped", function () {
+                return last(explode(DIRECTORY_SEPARATOR, $this->results_path)) . "/warped.jpg";
             })
                 ->hideFromIndex()
                 ->disableDownload(),
@@ -126,7 +137,9 @@ class ImageCheck extends Resource
     public function actions(Request $request)
     {
         return [
-            (new AnalyzeImage()),
+            (new AnalyzeImage())->canRun(function () {
+                return true;
+            })->withoutActionEvents(),
         ];
     }
 }

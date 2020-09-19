@@ -3,11 +3,11 @@
 
 namespace App\Http\Controllers\Api;
 
-
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AuthController extends Controller
 {
@@ -107,6 +107,30 @@ class AuthController extends Controller
         ]);
 
         $user->firebase_token = $request->get("firebase_token");
+        $user->save();
+
+        return response()->json(["message" => "ok"], 200);
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function updatePersonalInfo(Request $request)
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        $this->validate($request, [
+            "phone_number" => ["nullable", "string", Rule::unique("users", "phone_number")->ignore($user->id), "regex:/\+?[0-9]{7,9}/"],
+            "facebook_link" => ["nullable", "string", Rule::unique("users", "facebook_link")->ignore($user->id), "max:254"],
+            "telegram_account" => ["nullable", "string", Rule::unique("users", "telegram_account")->ignore($user->id), "max:64"],
+        ]);
+
+        $user->phone_number = $request->get("phone_number");
+        $user->facebook_link = $request->get("facebook_link");
+        $user->telegram_account = $request->get("telegram_account");
         $user->save();
 
         return response()->json(["message" => "ok"], 200);

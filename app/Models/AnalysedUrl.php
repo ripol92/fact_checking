@@ -2,39 +2,41 @@
 
 namespace App\Models;
 
-use App\Database\HasUUIDPrimaryKey;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App
- *
- * @property string|null $id
- * @property string|null $url
+ * @property string $id
+ * @property string $url
  * @property string $article
+ * @property string|mixed $text_ru json
+ * @property string[] $image_links
  * @property string $lng
- * @property string $adjectives_analyse json
- * @property string $text_ru json
- * @property array|null $image_links
- * @property string|null $created_at
- * @property string|null $updated_at
- * @property boolean $text_ru_response_received
- * @property boolean $fal_detector_finished
- * @property boolean $notifications_send
+ * @property string|mixed $adjectives_analyse json
+ * @property string|Carbon $created_at
+ * @property string|Carbon $updated_at
  **/
 class AnalysedUrl extends Model
 {
+    protected $keyType = 'string';
+
+    protected $fillable = [
+        "id",
+        "url",
+        "article",
+        "text_ru",
+        "image_links",
+        "lng",
+        "adjectives_analyse"
+    ];
+
     protected $casts = [
-        'image_links' => 'array',
+        "image_links" => "array",
+        "text_ru" => "json",
         "adjectives_analyse" => "json",
         "updated_at" => "datetime",
         "created_at" => "datetime"
     ];
-
-    protected $keyType = 'string';
-
-    use HasUUIDPrimaryKey;
-
-    protected $guarded = [];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

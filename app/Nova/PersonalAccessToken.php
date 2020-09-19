@@ -4,6 +4,7 @@
 namespace App\Nova;
 
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\ID;
@@ -11,6 +12,17 @@ use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
 
+/**
+ * Class PersonalAccessToken
+ * @package App\Nova
+ * @property int $id
+ * @property string $name
+ * @property string $token
+ * @property string|mixed abilities
+ * @property Carbon $last_used_at
+ * @property Carbon $updated_at
+ * @property Carbon $created_at
+ */
 class PersonalAccessToken extends Resource
 {
 
@@ -37,6 +49,10 @@ class PersonalAccessToken extends Resource
         'id', 'name',
     ];
 
+    /**
+     * @param Request $request
+     * @return array
+     */
     public function fields(Request $request)
     {
         return [
