@@ -2,56 +2,65 @@
 
 namespace App\Services;
 
+use App\Classes\Feeds\AsiaPlus;
+use App\Classes\Feeds\Factcheck;
+use App\Classes\Feeds\Fergana;
+use App\Classes\Feeds\Nm;
+use App\Classes\Feeds\Standard;
+use App\Classes\Feeds\XmlString;
 use App\Models\RssFeedResource;
-use Feed;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class RssFeedService
 {
+    protected $resources = [
+        'ozodi' => Standard::class,
+        'central_asian' => Standard::class,
+        'avesta' => Standard::class,
+        'asia-plus' => AsiaPlus::class, //without desc, img
+        'faraj' => Standard::class, //without img
+        'sugdnews' => Standard::class,
+//        'khovar' => XmlString::class, //custom
+        'cm-1' => Standard::class, //without img
+        'current_time' => Standard::class,
+        'ussr' => Standard::class,
+        'sputnik' => Standard::class,
+        'khujand' => Standard::class,
+        'sugd' => Standard::class,
+        'president' => Standard::class, //without desc, img
+        'pressa' => Standard::class, //without img
+        'asia-times' => Standard::class,
+        'orion' => Standard::class,
+        'ittiloot' => Standard::class,
+        'nm' => Nm::class, //without img
+        'vecherka' => Standard::class, //without img
+        'factcheck' => Factcheck::class, //html_encoded тяжёлый текст с кастомными стилями и js кодом, поэтому не беру
+        'fergana' => XmlString::class, //custom
+        'jumhuriyat' => XmlString::class, //custom
+        'vkd' => XmlString::class, //custom
+        'mfa' => XmlString::class, //custom
+        'oila' => XmlString::class, //custom
+        'tajikta' => XmlString::class, //custom
+        'top' => XmlString::class, //custom
+        'tajikistan_news' => XmlString::class, //custom
+        'novosti_tajikistana' => XmlString::class, //custom
+    ];
 
-    public static function allRssFeedNews()
+    public function allRssFeedNews()
     {
-        $now = now()->toDateTimeString();
         $news = [];
-        $rssFeedResources = RssFeedResource::with("language")->get();
+        $rssFeedResources = RssFeedResource::with("language")->whereIn('name',
+            array_keys($this->resources))->get();
 
         foreach ($rssFeedResources as $rssFeedResource) {
             try {
-                $rss = Feed::loadRss($rssFeedResource->link);
+                $feeds = (new $this->resources[$rssFeedResource->name])
+                    ->manipulate($rssFeedResource->link, $rssFeedResource->language->name, $rssFeedResource->display_name);
+                $news = array_merge($news, $feeds);
             } catch (\Exception $e) {
-                // Здесь логируем ошибки
                 Log::error($e->getMessage());
                 continue;
-            }
-
-            foreach ($rss->item as $item) {
-                $img = "no image";
-                $firstFeed = reset($item->{"content:encoded"});
-                if ($firstFeed) {
-                    $all = [];
-                    preg_match("/(?:http|https|ftp):\/\/\S+\.(?:jpg|jpeg|png)/", $firstFeed, $all);
-                    if (sizeof($all) > 0) {
-                        $img = reset($all);
-                    }
-                } else {
-                    try {
-                        $img = (string)$item->enclosure->attributes()["url"];
-                    } catch (\Exception $e) {
-                    }
-                }
-                $news[] = [
-                    "title" => strip_tags($item->title),
-                    "description" => strip_tags($item->description),
-                    "link" => strip_tags($item->link),
-                    "date" => date("Y-m-d h:i:sa", strip_tags($item->timestamp)),
-                    "lang" => $rssFeedResource->language->name,
-                    "html_encoded" => $firstFeed ? $firstFeed : "no html encoded",
-                    "source" => $rssFeedResource->display_name,
-                    "img" => $img,
-                    "created_at" => $now,
-                    "updated_at" => $now,
-                ];
             }
         }
         DB::table("marked_items")->insertOrIgnore($news);

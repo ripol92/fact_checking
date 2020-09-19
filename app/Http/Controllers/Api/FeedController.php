@@ -15,7 +15,6 @@ class FeedController extends Controller
 {
     const FACT_CHECK_SOURCE_NAME = 'FactCheckTj';
 
-
     /**
      * @param Request $request
      * @return \Illuminate\Contracts\Pagination\Paginator
