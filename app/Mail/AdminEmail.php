@@ -35,7 +35,7 @@ class AdminEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.admin', [
+        return $this->markdown('emails.admin', [
             "feedback" => $this->feedback->feedback,
             "userName" => $this->feedback->user->name
         ]);
