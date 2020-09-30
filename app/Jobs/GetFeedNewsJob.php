@@ -31,6 +31,6 @@ class GetFeedNewsJob implements ShouldQueue
      */
     public function handle()
     {
-       RssFeedService::allRssFeedNews();
+        (new RssFeedService())->allRssFeedNews();
     }
 }
